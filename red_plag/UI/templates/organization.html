@@ -1,0 +1,52 @@
+<html>
+<head>
+<meta charset="UTF-8">
+    <title> Red Plag </title>
+    <style>
+        a.logo:link,a.logo:visited,a.logo:hover, a.logo:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";padding-left:.7em;} 
+        body{background-color:rgba(0,0,0,1);}
+        a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;} 
+    </style>
+</head>
+<body style="align:center;">
+<a class="logo" href="/"><b>Red Plag</b></a>
+<a class="logoside" href="/">Team 779499120</a>
+<br>
+<br>
+<hr style=color:white>
+<p style="color:white; font-size:2em; text-align:center; font-family:'Arial';">Organization Passcode</p>
+      <br>
+	<p style="color:white; font-size:1.5em; text-align:center">Welcome {{username}}</p>
+	<p style="color:red;font-size:1.5em; text-align:center">{{message1}}</p>
+	<form name = "form" action = "/orgaa/"
+        method = "post" >{% csrf_token %}
+
+         <div style = "max-width:470px;text-align:center;margin-left:32%;">
+            <span style="color:white;font-size:1.5em;font-family:'Arial';" >Passcode:</span>
+               <input type = "text" style = "margin-left:20%; padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" 
+                  placeholder = "passcode" name = "passcode" />
+         </div>
+         <br>
+         <div style = "max-width:470px;text-align:center;margin-left:32%;">
+               <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
+                  height:50px; width:50%;margin-left:19%;" type = "submit" 
+                  value = "proceed" >
+                  <div style="color:black; font-size:1.5em;">
+                  <strong>Proceed</strong>
+              </div>
+               </button>
+         </div>
+     
+     </form>
+     <form action="/home/">
+     <div style = "max-width:470px;text-align:center;margin-left:32%;">
+               <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
+                  height:50px; width:50%;margin-left:19%;" type = "submit" 
+                  value = "logout" >
+                  <div style="color:black; font-size:1.5em;">
+                  <strong>Log out</strong>
+              </div>
+               </button>
+         </div>
+     </form>
+ </body>

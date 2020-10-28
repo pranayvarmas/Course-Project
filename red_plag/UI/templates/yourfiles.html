@@ -1,0 +1,38 @@
+<html>
+<head>
+<meta charset="UTF-8">
+    <title> Red Plag </title>
+    <style>
+        a.logo:link,a.logo:visited,a.logo:hover, a.logo:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";padding-left:.7em;} 
+        a.demo:link, a.demo:visited,a.demo:active{color:white;text-decoration:none;font-size:1.5em;text-align:center;font-family:"Calibri";}
+        a.demo:hover{color:blue;text-decoration:none;font-size:1.5em;text-align:center;font-family:"Calibri";}
+        body{background-color:rgba(0,0,0,1);}
+        a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;} 
+    </style>
+</head>
+<body style="align:center;">
+<a class="logo" href="/"><b>Red Plag</b></a>
+<a class="logoside" href="/">Team 779499120</a>
+<br>
+<br>
+<hr style=color:white>
+<p style="color:white; font-size:2em; text-align:center; font-family:'Arial';">Uploaded Files</p>
+<div style=color:red;>{{message1}}</div>
+      <br>
+
+{% for post in file %}
+<a class="demo" href="{{post.picture.url}}" download="{{post.picture.url}}">Download {{post.picture.name}}</a>
+<br>
+{% endfor %}
+<form action="/loghome/">
+      <div style = "max-width:470px;text-align:center;margin-left:32%;">
+               <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
+                  height:50px; width:50%;margin-left:19%;" type = "home" 
+                  value = "home" >
+                  <div style="color:black; font-size:1.5em;">
+                  <strong>Home</strong>
+              </div>
+               </button>
+         </div>
+     </form>
+</body>
