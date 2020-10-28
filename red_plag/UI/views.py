@@ -3,7 +3,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render
 from .forms import NewUserForm
-from UI.forms import ProfileForm, passcod
+from UI.forms import ProfileForm,SignForm
 from UI.models import Profile
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
@@ -31,21 +31,36 @@ def login1(request):
 		return render(request, 'loggedin.html', {"username":username})
 	else:
 		if request.method=="POST":
-#			print(request.POST)
+			print(request.POST)
       #Get the posted form
 			MyLoginForm = LoginForm(request.POST)
 			if MyLoginForm.is_valid():
 				username = MyLoginForm.cleaned_data['username']
 				password=MyLoginForm.cleaned_data['password']
-				user=authenticate(username=username, password=password)
-				if user is not None:
-					login(request, user)
+				last_name=MyLoginForm.cleaned_data['last_name']
+				passcode=MyLoginForm.cleaned_data['passcode']
+				temp=test(request,last_name, passcode)
+				if temp:
+					user=authenticate(username=username, password=password)
+					if user is not None:
+						login(request, user)
+						sec=request.user
+						if (sec.last_name==last_name):
+							return render(request, 'loggedin.html', {"username":username})
+						else:
+							logout(request)
+							message1="Invalid match"
+							return render(request, 'login.html', {"message1":message1})
+					else:
+						message1="Username or password or university is Incorrect"
+#						message1="Invalid username or password."
+						return render(request,'login.html', {"message1":message1} )
 				else:
-					message1="Username or password is Incorrect"
-#					message1="Invalid username or password."
-					return render(request,'login.html', {"message1":message1} )
+					message1="Imvalid Passcode"
+					return render(request, 'login.html', {"message1":message1})
 			else:
-				message1="Username or Password field is empty"
+				print(MyLoginForm.errors)
+				message1="All fields are mandatory"
 #				message1=message2
 #				message1.replace('<ul', '')
 #				message1.replace('class="errorlist"', '')
@@ -58,7 +73,7 @@ def login1(request):
 #				error="Invalid username or password."
 				return render(request,'login.html', {"message1":message1} )
 			form = LoginForm()
-			return render(request,'organization.html', {"username":username})
+			return render(request,'loggedin.html', {"username":username})
 		else:
 			return render(request, 'login.html')
 
@@ -71,18 +86,30 @@ def signup(request):
 def save(request):
 	if request.method == 'POST':
 		form1 = NewUserForm(request.POST)
+		form2=SignForm(request.POST)
 #		print(request.POST)
 #		print(form1)
-		if form1.is_valid():
-#			print("yes")
-			form1.save()
-			message1="Account Created Succesfully"
-			return render(request, 'login.html', {"message1":message1})
+		if (form1.is_valid() and form2.is_valid()):
+			#print("yes")
+#			sec=form1.last_name
+#			sec.last_name=sec.last_name+form1.cleaned_data["organization"]
+#			passcode=form1.cleaned_data["passcode"]
+			temp=test(request,form2.cleaned_data['last_name'], form2.cleaned_data['passcode'])
+			if temp:
+				#print(1)
+				form1.save()
+				message1="Account Created Succesfully"
+				return render(request, 'login.html', {"message1":message1})
+			else:
+				message1="Invalid Organization Passcode"
+				return render(request, 'signup.html', {"message1":message1})
 		else:
+			#print("no")
 			message1=form1.errors
-			return render(request,'signup.html', {"message1":message1} )
+			message2=form2.errors
+			return render(request,'signup.html', {"message1":message1, "message2":message2} )
 	form1 = UserCreationForm()
-	return render(request, "login.html")
+	return render(request, "login.html", {"message1":message1})
 def loggedin(request):
 	saved = False
 	username=None
@@ -200,35 +227,48 @@ def download(request, path):
 	else:
 		message1="Please login to download the files"
 		return render(request,'login.html', {"message1":message1})
-def orga(request):
-	if request.user.is_authenticated:
-		username=request.user.username
-		return render(request, 'organization.html', {"username":username})
-	else:
-		message1="Please login to enter Organization Passcode"
-		return render(request, 'login.html', {"message1":message1})
-def org(request):
-	if request.user.is_authenticated:
-		username=request.user.username
-		if request.method=="POST":
-			form=passcod(request.POST)
-			if form.is_valid():
-				passcode=form.cleaned_data["passcode"]
-				if(passcode==123456):
-					return render(request, 'loggedin.html', {"username":username})
-				else:
-					message1="Organization Passcode is incorrect"
-					return render(request, 'organization.html', {"username":username, "message1":message1})
-			else:
+#def orga(request):
+#	if request.user.is_authenticated:
+#		username=request.user.username
+#		return render(request, 'organization.html', {"username":username})
+#	else:
+#		message1="Please login to enter Organization Passcode"
+#		return render(request, 'login.html', {"message1":message1})
+#def org(request):
+#	if request.user.is_authenticated:
+#		username=request.user.username
+#		if request.method=="POST":
+#			form=passcod(request.POST)
+#			if form.is_valid():
+#				passcode=form.cleaned_data["passcode"]
+#				if(passcode==123456):
+#					return render(request, 'loggedin.html', {"username":username})
+#				else:
+#					message1="Organization Passcode is incorrect"
+#					return render(request, 'organization.html', {"username":username, "message1":message1})
+#			else:
 #				print(form.errors)
-				message1="Organization Passcode is Invalid"
-				return render(request, 'organization.html', {"username":username, "message1":message1})
+#				message1="Organization Passcode is Invalid"
+#				return render(request, 'organization.html', {"username":username, "message1":message1})
+#		else:
+#			form=passcod()
+#			message1="Organization Passcode is Invalid"
+#			logoutin(request)
+#			return render(request, 'login.html', {"message1":message1})
+#	else:
+#		message1="Please login to enter Organization Passcode"
+#		return render(request, 'login.html', {"message1":message1})
+def test(request, last_name, passcode):
+	org=last_name
+	if (org=="IIT Bombay"):
+		if (passcode==123456):
+			return True
 		else:
-			form=passcod()
-			message1="Organization Passcode is Invalid"
-			logoutin(request)
-			return render(request, 'login.html', {"message1":message1})
+			return False
 	else:
-		message1="Please login to enter Organization Passcode"
-		return render(request, 'login.html', {"message1":message1})
+		if (org=="IIT Madras"):
+			if (passcode==111111):
+				return True
+			else:
+				return False
 

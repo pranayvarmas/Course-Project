@@ -9,6 +9,26 @@
         body{background-color:rgba(0,0,0,1);}
         a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;} 
     </style>
+    <script>
+    var subjectObject = {
+  "IIT Bombay": {
+    "HTML": ["Links", "Images", "Tables", "Lists"],
+    "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
+    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]    
+  },
+  "IIT Madras": {
+    "PHP": ["Variables", "Strings", "Arrays"],
+    "SQL": ["SELECT", "UPDATE", "DELETE"]
+  }
+}
+window.onload = function() {
+  var subjectSel = document.getElementById("last_name");
+  for (var x in subjectObject) {
+    subjectSel.options[subjectSel.options.length] = new Option(x, x);
+  }
+  
+}
+</script>
 </head>
 <body style="align:center;">
 <a class="logo" href="/"><b>Red Plag</b></a>
@@ -38,7 +58,21 @@
                   placeholder = "password" name = "password" />
               </label>
          </div>
-            
+         <br>
+           <div style="margin-left:31%;text-align:center;max-width:470px; ">
+            <span style="color:white; font-size:1.5em;font-family:'Arial'; ">Organization:</span> <select style = "margin-left:20%;padding: 12px 60px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" name="last_name" id="last_name">
+            <option value="" selected="selected">Select</option>
+            </select>
+            <br>
+        </div>
+         <br>
+         <div style = "max-width:470px;text-align:center;margin-left:32%;">
+                <label>
+                <span style="color:white;font-size:1.5em;font-family:'Arial';" >Passcode: </span>
+               <input type = "password" style = "margin-left:20%;padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" 
+                  placeholder = "passcode" name = "passcode" />
+              </label>
+         </div>
          <br>
          
          <div style = "max-width:470px;text-align:center;margin-left:32%;">
@@ -50,8 +84,6 @@
                   <strong>Login</strong>
               </div>
                </button>
-               
-            </center>
          </div>
          
       </form>
