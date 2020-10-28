@@ -27,7 +27,7 @@ class ProfileForm(forms.Form):
     picture = forms.FileField()
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(UserProfileForm, self).__init__(*args, **kwargs)
+        super(UserProfileForm, self).__init__(*args, **kwargs)  
         self.fields["level"].choices = ( ('admin', 'administrator' ))
 
     class Meta:
@@ -37,7 +37,7 @@ class UserProfileForm(forms.ModelForm):
  #   passcode=forms.IntegerField(max_value=999999)
 class SignForm(forms.Form):
     username = forms.CharField(max_length = 100)
-#    password = forms.CharField(widget = forms.PasswordInput())
-    password2=forms.CharField(widget=forms.PasswordInput())
+    password1 = forms.CharField(max_length=100)
+    password2=forms.CharField(max_length=100)
     last_name=forms.CharField(max_length=100)
     passcode=forms.IntegerField(max_value=999999)
