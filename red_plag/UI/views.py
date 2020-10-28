@@ -104,7 +104,7 @@ def save(request):
 				message1="Invalid Organization Passcode"
 				return render(request, 'signup.html', {"message1":message1})
 		else:
-			#message1=form1.errors
+			message1=form1.errors
 			message2=form2.errors
 			return render(request,'signup.html', {"message2":message2} )
 	form1 = UserCreationForm()
