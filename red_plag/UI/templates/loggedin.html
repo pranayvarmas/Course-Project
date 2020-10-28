@@ -20,10 +20,10 @@
       <p style="color:red; text-align:center; font-size:1.5em">{{message1}}</p>
       <form name = "form" enctype = "multipart/form-data"
          action = "/saved/" method = "POST" >{% csrf_token %}
-         <div style = "max-width:470px;text-align:center;margin-left:35%;">
-            <span style="color:white;font-size:1.5em;font-family:'Arial';" >Upload Picture:</span>
+         <div style = "max-width:470px;color:white; text-align:center;margin-left:35%;">
+            <span style="color:white;font-size:1.5em;font-family:'Arial';" >Upload Files:</span>
             
-               <input type = "file" style = "margin-left:20%; margin: 8px 0;box-sizing: border-box;border:2px; border-style:solid; border-color:rgba(255,255,255,.4);font-size:1.5em;background-color:white;padding:4px;"
+               <input type = "file" style = "margin-left:20%;background-color:black; margin: 8px 0;box-sizing: border-box;border:2px; border-style:solid; border-color:rgba(255,255,255,.4);font-size:1.5em;background-color:white;padding:4px;"
                   placeholder = "Picture" name = "picture" />
          </div>
 
