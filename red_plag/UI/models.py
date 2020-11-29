@@ -8,3 +8,13 @@ class Profile(models.Model):
 
     class Meta:
       db_table = "profile"
+      
+class UserModel(models.Model):
+   username = models.CharField(max_length=100)
+   university = models.CharField(max_length=100)
+   def __str__(self):
+      return self.username
+   
+   class Meta:
+      db_table = "usersinfo"
+   

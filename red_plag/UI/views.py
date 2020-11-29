@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.shortcuts import render
 from .forms import NewUserForm
 from UI.forms import ProfileForm,SignForm
-from UI.models import Profile
+from UI.models import Profile, UserModel
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 # Create your views here.
@@ -96,10 +96,13 @@ def save(request):
 #			passcode=form1.cleaned_data["passcode"]
 			temp=test(request,form2.cleaned_data['university'], form2.cleaned_data['passcode'])
 			if temp:
-#				print(1)
-				form1.save()
-				message1="Account Created Succesfully"
-				return render(request, 'login.html', {"message1":message1})
+			   userd = UserModel()
+			   userd.username = form2.cleaned_data['username']
+			   userd.university=form2.cleaned_data['university']
+			   userd.save()
+			   form1.save()
+			   message1="Account Created Succesfully"
+			   return render(request, 'login.html', {"message1":message1})
 			else:
 				message1="Invalid Organization Passcode"
 				return render(request, 'signup.html', {"message1":message1})
