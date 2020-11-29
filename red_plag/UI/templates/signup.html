@@ -2,16 +2,16 @@
 <meta charset="UTF-8">
     <title> Red Plag </title>
     <style>
-        a.logo:link,a.logo:visited,a.logo:hover, a.logo:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";padding-left:.7em;} 
+        a.logo:link,a.logo:visited,a.logo:hover, a.logo:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";padding-left:.7em;}
         body{background-color:rgba(0,0,0,1);}
-        a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;} 
+        a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;}
     </style>
     <script>
     var subjectObject = {
   "IIT Bombay": {
     "HTML": ["Links", "Images", "Tables", "Lists"],
     "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
-    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]    
+    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]
   },
   "IIT Madras": {
     "PHP": ["Variables", "Strings", "Arrays"],
@@ -19,11 +19,11 @@
   }
 }
 window.onload = function() {
-  var subjectSel = document.getElementById("last_name");
+  var subjectSel = document.getElementById("university");
   for (var x in subjectObject) {
     subjectSel.options[subjectSel.options.length] = new Option(x, x);
   }
-  
+
 }
 </script>
 </head>
@@ -36,21 +36,21 @@ window.onload = function() {
 <p style="color:white; font-size:2em; text-align:center; font-family:'Arial';">Sign Up</p>
       <form name = "form" action = "/save/"
         method = "post" >{% csrf_token %}
-         
+
          <div style = "max-width:470px;text-align:center;margin-left:32%;">
             <span style="color:white;font-size:1.5em;font-family:'Arial';" >Username:</span>
                <input type = "text" style = "margin-left:20%; padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);"
                   placeholder = "username" name = "username" />
          </div>
-			
+
          <br>
-         
+
          <div style = "max-width:470px;text-align:center;margin-left:32%;">
             <span style="color:white;font-size:1.5em;font-family:'Arial';" >Password:</span>
                <input type = "password" style = "margin-left:20%; padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);"
                   placeholder = "password" name = "password1" />
          </div>
-			
+
          <br>
 
          <div style = "max-width:470px;text-align:center;margin-left:32%;">
@@ -60,7 +60,7 @@ window.onload = function() {
          </div>
           <br>
            <div style="margin-left:31%;text-align:center;max-width:470px; ">
-            <span style="color:white; font-size:1.5em;font-family:'Arial'; ">Organization:</span> <select style = "margin-left:20%;padding: 12px 60px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" name="last_name" id="last_name">
+            <span style="color:white; font-size:1.5em;font-family:'Arial'; ">Organization:</span> <select style = "margin-left:20%;padding: 12px 60px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" name="university" id="university">
             <option value="" selected="selected">Select</option>
             </select>
             <br>
@@ -69,28 +69,28 @@ window.onload = function() {
          <div style = "max-width:470px;text-align:center;margin-left:32%;">
                 <label>
                 <span style="color:white;font-size:1.5em;font-family:'Arial';" >Passcode: </span>
-               <input type = "password" style = "margin-left:20%;padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" 
+               <input type = "password" style = "margin-left:20%;padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);"
                   placeholder = "passcode" name = "passcode" />
               </label>
          </div>
          <br>
          <br>
-         
+
          <div style = "max-width:470px;text-align:center;margin-left:32%;">
                <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
-                  height:50px; width:50%;margin-left:19%;" type = "submit" 
+                  height:50px; width:50%;margin-left:19%;" type = "submit"
                   value = "save" >
                   <div style="color:black; font-size:1.5em;">
                   <strong>Save</strong>
               </div>
                </button>
          </div>
-        
+
       </form>
       <form action="/">
           <div style = "max-width:470px;text-align:center;margin-left:32%;">
                <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
-                  height:50px; width:50%;margin-left:19%;" type = "submit" 
+                  height:50px; width:50%;margin-left:19%;" type = "submit"
                   value = "login" >
                   <div style="color:black; font-size:1.5em;">
                   <strong>Login</strong>

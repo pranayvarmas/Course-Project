@@ -37,15 +37,15 @@ def login1(request):
 			if MyLoginForm.is_valid():
 				username = MyLoginForm.cleaned_data['username']
 				password=MyLoginForm.cleaned_data['password']
-				last_name=MyLoginForm.cleaned_data['last_name']
+				university=MyLoginForm.cleaned_data['university']
 				passcode=MyLoginForm.cleaned_data['passcode']
-				temp=test(request,last_name, passcode)
+				temp=test(request,university, passcode)
 				if temp:
 					user=authenticate(username=username, password=password)
 					if user is not None:
 						login(request, user)
 						sec=request.user
-						if (sec.last_name==last_name):
+						if (sec.university==university):
 							return render(request, 'loggedin.html', {"username":username})
 						else:
 							logout(request)
@@ -94,7 +94,7 @@ def save(request):
 #			sec=form1.last_name
 #			sec.last_name=sec.last_name+form1.cleaned_data["organization"]
 #			passcode=form1.cleaned_data["passcode"]
-			temp=test(request,form2.cleaned_data['last_name'], form2.cleaned_data['passcode'])
+			temp=test(request,form2.cleaned_data['university'], form2.cleaned_data['passcode'])
 			if temp:
 #				print(1)
 				form1.save()
@@ -260,8 +260,8 @@ def org(request):
 	else:
 		message1="Please login to enter Organization Passcode"
 		return render(request, 'login.html', {"message1":message1})
-def test(request, last_name, passcode):
-	org=last_name
+def test(request, university, passcode):
+	org=university
 	if (org=="IIT Bombay"):
 		if (passcode==123456):
 			return True
