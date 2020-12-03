@@ -4,15 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title> Red Plag </title>
-    <script>
-    var subjectObject = {"IIT Bombay":{},"IIT Madras":{}}
-    window.onload = function() {
-      var subjectSel = document.getElementById("university");
-      for (var x in subjectObject) {
-        subjectSel.options[subjectSel.options.length] = new Option(x);
-      }
-    }
-</script>
+    
 <link rel="stylesheet" href="../../home/pranay/red_plag/UI/templates/all.css">
 </head>
 <body>
@@ -45,8 +37,18 @@
            <div class="columnbox">
             <span class="colboxspan">University:</span>
             <select class = "colboxinput" name="university" id="university">
-              <option value="" selected="selected">Select</option>
+              <option value="university" selected="selected" >Select</option>
             </select>
+            <script>
+              var links1="{{links}}"
+              var options = links1.split(';');
+              var select = document.getElementById("university");
+              for(var i=0; i<options.length-1; i++)
+              {
+                  options[i]=options[i]
+                  select.options[i] = new Option(options[i], i);
+              }
+              </script>
             <br>
         </div>
          <br>
