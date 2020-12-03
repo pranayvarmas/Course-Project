@@ -5,17 +5,19 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class LoginForm(forms.Form):
+    #user = models.OneToOneField(User)
     username = forms.CharField(max_length = 100)
     password = forms.CharField(widget = forms.PasswordInput())
     university=forms.CharField(max_length=100)
     passcode=forms.IntegerField(max_value=999999)
 class NewUserForm(UserCreationForm):
-    first_name=forms.CharField(max_length=100)
-    first_name=""
+    #first_name=forms.CharField(max_length=100)
+    #first_name=""
     university=forms.CharField(max_length=100)
+    email=forms.EmailField(max_length=100)
     class Meta:
         model = User
-        fields = ("username", "password1", "password2", "first_name", "university")
+        fields = ("email", "username", "password1", "password2", "university")
 
     def save(self, commit=True):
         user = super(NewUserForm, self).save(commit=False)
@@ -36,8 +38,15 @@ class ProfileForm(forms.Form):
 #class passcod(forms.Form):
  #   passcode=forms.IntegerField(max_value=999999)
 class SignForm(forms.Form):
+    email=forms.EmailField(max_length=100)
     username = forms.CharField(max_length = 100)
     password1 = forms.CharField(max_length=100)
     password2=forms.CharField(max_length=100)
     university=forms.CharField(max_length=100)
     passcode=forms.IntegerField(max_value=999999)
+class PasswordResetForm(forms.Form):
+    #username=forms.CharField(max_length=100)
+    #university=forms.CharField(max_length=100)
+    email=forms.EmailField(max_length=100)
+class OtpForm(forms.Form):
+    otp=forms.IntegerField(max_value=100)

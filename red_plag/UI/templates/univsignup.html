@@ -2,15 +2,6 @@
 <meta charset="UTF-8">
     <title> Red Plag </title>
     <link rel="stylesheet" href="./all.css">
-    <script>
-    var subjectObject = {"IIT Bombay":{},"IIT Madras":{}}
-    window.onload = function() {
-      var subjectSel = document.getElementById("university");
-      for (var x in subjectObject) {
-        subjectSel.options[subjectSel.options.length] = new Option(x);
-      }
-    }
-</script>
 </head>
 <body>
 <a class="logo" href="/"><b>Red Plag</b></a>
@@ -19,9 +10,9 @@
 <br>
 <hr class="hr1">
 <p class="heading">Sign Up</p>
-      <form name = "form" action = "/createdaccount/" method = "post" >{% csrf_token %}
+      <form name = "form" action = "/univcreatedaccount/" method = "post" >{% csrf_token %}
          <div class="column">
-            <span class="colspan">Email:</span>
+            <span class="colspan">University Email:</span>
                <input type = "email" class="colinput"
                   placeholder = "email" name = "email" />
          </div>
@@ -49,9 +40,9 @@
          </div>
           <br>
            <div class="columnbox">
-            <span class="colboxspan">University:</span> <select class="colboxinput" name="university" id="university">
-            <option value="" selected="selected">Select</option>
-            </select>
+            <span class="colboxspan">University Name:</span> 
+            <input type = "text" class="colinput"
+                  placeholder = "university" name = "university" />
             <br>
         </div>
          <br>

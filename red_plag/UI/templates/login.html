@@ -4,106 +4,100 @@
 <head>
     <meta charset="UTF-8">
     <title> Red Plag </title>
-    <style>
-        a.logo:link,a.logo:visited,a.logo:hover, a.logo:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";padding-left:.7em;} 
-        body{background-color:rgba(0,0,0,1);}
-        a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:white;text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;} 
-    </style>
     <script>
-    var subjectObject = {
-  "IIT Bombay": {
-    "HTML": ["Links", "Images", "Tables", "Lists"],
-    "CSS": ["Borders", "Margins", "Backgrounds", "Float"],
-    "JavaScript": ["Variables", "Operators", "Functions", "Conditions"]    
-  },
-  "IIT Madras": {
-    "PHP": ["Variables", "Strings", "Arrays"],
-    "SQL": ["SELECT", "UPDATE", "DELETE"]
-  }
-}
-window.onload = function() {
-  var subjectSel = document.getElementById("last_name");
-  for (var x in subjectObject) {
-    subjectSel.options[subjectSel.options.length] = new Option(x, x);
-  }
-  
-}
+    var subjectObject = {"IIT Bombay":{},"IIT Madras":{}}
+    window.onload = function() {
+      var subjectSel = document.getElementById("university");
+      for (var x in subjectObject) {
+        subjectSel.options[subjectSel.options.length] = new Option(x);
+      }
+    }
 </script>
+<link rel="stylesheet" href="../../home/pranay/red_plag/UI/templates/all.css">
 </head>
-<body style="align:center;">
+<body>
 <a class="logo" href="/"><b>Red Plag</b></a>
 <a class="logoside" href="/">Team 779499120</a>
 <br>
 <br>
-<hr style=color:white>
-<p style="color:white; font-size:2em; text-align:center; font-family:'Arial';">Login Page</p>
-      <div style="color:red;font-size:1.5em; text-align:center;">{{message1}}</div>
+<hr class="hr1">
+<p class="heading">Login Page</p>
+      <div class="message1">{{message1}}</div>
       <br>
 
-      <form name = "form" action = "/welcome/"
-        method = "post"  >{% csrf_token %}
+      <form name = "form" action = "/" method = "post"  >{% csrf_token %}
          
-         <div style = "max-width:470px;text-align:center;margin-left:32%;">
-            <span style="color:white;font-size:1.5em;font-family:'Arial';" >Username:</span>
-               <input type = "text" style = "margin-left:20%; padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);size:'50';" 
+         <div class="column">
+            <span class="colspan" >Username:</span>
+               <input type = "text" class = "colinput" 
                   placeholder = "username" name = "username" />
          </div>
             
          <br>
          
-         <div style = "max-width:470px;text-align:center;margin-left:32%;">
+         <div class="column">
                 <label>
-                <span style="color:white;font-size:1.5em;font-family:'Arial';" >Password: </span>
-               <input type = "password" style = "margin-left:20%;padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" 
-                  placeholder = "password" name = "password" />
+                <span class="colspan" >Password: </span>
+               <input type = "password" class="colinput" placeholder = "password" name = "password" />
               </label>
          </div>
          <br>
-           <div style="margin-left:31%;text-align:center;max-width:470px; ">
-            <span style="color:white; font-size:1.5em;font-family:'Arial'; ">Organization:</span> <select style = "margin-left:20%;padding: 12px 60px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" name="last_name" id="last_name">
-            <option value="" selected="selected">Select</option>
+           <div class="columnbox">
+            <span class="colboxspan">University:</span>
+            <select class = "colboxinput" name="university" id="university">
+              <option value="" selected="selected">Select</option>
             </select>
             <br>
         </div>
          <br>
-         <div style = "max-width:470px;text-align:center;margin-left:32%;">
+         <div class="column">
                 <label>
-                <span style="color:white;font-size:1.5em;font-family:'Arial';" >Passcode: </span>
-               <input type = "password" style = "margin-left:20%;padding: 12px 20px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);" 
-                  placeholder = "passcode" name = "passcode" />
+                <span class="colspan" >Passcode: </span>
+               <input type = "integer" class="colinput" placeholder = "passcode" name = "passcode" />
               </label>
          </div>
          <br>
          
-         <div style = "max-width:470px;text-align:center;margin-left:32%;">
+         <div class="columnbutton">
             
-               <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
-                  height:50px; width:50%;margin-left:19%;" type = "submit" 
-                  value = "Login" >
-                  <div style="color:black; font-size:1.5em;">
+               <button class = "colbutton" type = "submit" value = "Login" >
+                  <div class="colbuttext">
                   <strong>Login</strong>
               </div>
                </button>
          </div>
          
       </form>
-      <form name = "signup" action = "/signup/"
-        method = "post" >{% csrf_token %}
-         <div style = "max-width:470px;text-align:center;margin-left:32%;">
-            <center> 
-            
-               <button style = "border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;padding: 15px 32px;text-decoration: none;display: inline-block;  border: none;box-shadow: 5px 5px #999;cursor:pointer;
-                  height:50px; width:50%;margin-left:19%;" type = "submit" 
-                  value = "Signup" >
-                  <div style="color:black; font-size:1.5em;">
+      <br>
+      <form name = "forgot" action = "/forgotpassword1/" method = "post" >{% csrf_token %}
+         <div class="columnbutton">
+               <button class="colbutton" type = "submit" value = "forgot" >
+                  <div class="colbuttext">
+                  <strong>Forgot Password</strong>
+              </div>
+               </button>
+         </div>
+      </form>
+      <br>
+      <form name = "signup" action = "/signup/" method = "post" >{% csrf_token %}
+         <div class="columnbutton">
+               <button class="colbutton" type = "submit" value = "Signup" >
+                  <div class="colbuttext">
                   <strong>Join us</strong>
               </div>
                </button>
-               
-            </center>
          </div>
       </form>
-      
+      <br>
+      <form name = "univsignup" action = "/univsignup/" method = "post" >{% csrf_token %}
+         <div class="columnbutton">
+               <button class="colbutton" type = "submit" value = "univlogin" >
+                  <div class="colbuttext">
+                  <strong>University Signup</strong>
+              </div>
+               </button>
+         </div>
+      </form>
    </body>
 </body>
 </html>

@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta charset="UTF-8">
+    <title> Red Plag </title>
+    <link rel="stylesheet" href="all.css">
+</head>
+<body style="align:center;">
+<a class="logo" href="/"><b>Red Plag</b></a>
+<a class="logoside" href="/">Team 779499120</a>
+<br>
+<br>
+<hr class="hr1">
+<p class="heading">Logged in as {{username}}</p>
+      <br>
+      <p class="heading2">Welcome {{username}}</p>
+      <p class="message1">{{message1}}</p>
+      <form name = "form" enctype = "multipart/form-data" action = "/{{username}}/uploadfiles/" method = "POST" >{% csrf_token %}
+         <div class="column">
+            <span class="colspan" >Upload Files:</span>
+               <input type = "file" class="colinppic"
+                  placeholder = "Picture" name = "picture" />
+         </div>
+
+         <br>
+
+         <div class="columnbutton">
+               <button class="colbutton" type = "submit" value = "upload" >
+                  <div class="colbuttext">
+                  <strong>Upload</strong>
+              </div>
+               </button>
+         </div>
+
+      </form>
+      <form action="/{{username}}/yourfiles/">
+      <div class="columnbutton" >
+               <button class="colbutton" type = "submit"value = "files">
+                  <div class="colbuttext">
+                  <strong>Your Files</strong>
+              </div>
+               </button>
+         </div>
+      </form>
+      <form action="/{{username}}/changepassword/">
+      <div class="columnbutton" >
+               <button class="colbutton" type = "submit"value = "logout" >
+                  <div class="colbuttext">
+                  <strong>Change Password</strong>
+              </div>
+               </button>
+         </div>
+      </form>
+      <form action="/home/">
+      <div class="columnbutton">
+               <button class="colbutton" type = "submit"value = "logout" >
+                  <div class="colbuttext">
+                  <strong>Log out</strong>
+              </div>
+               </button>
+         </div>
+      </form>
+
+   </body>
+</html>

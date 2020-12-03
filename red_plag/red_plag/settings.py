@@ -29,7 +29,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 LOGIN_REDIRECT_URL = '/'
 # Application definition
-
+#AUTH_USER_MODEL = 'UI.UserModel'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -122,3 +122,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR,"static")]
 MEDIA_URL="/uploads/"
 MEDIA_ROOT=os.path.join(BASE_DIR,'uploads_cdn')
+EMAIL_BACKEND ='django.core.mail.backends.smtp.EmailBackend'
+FROM_EMAIL='teamredplag.779499120@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'teamredplag.779499120@gmail.com'
+EMAIL_HOST_PASSWORD = 'redplag@779499120'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
