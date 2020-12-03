@@ -2,15 +2,7 @@
 <meta charset="UTF-8">
     <title> Red Plag </title>
     <link rel="stylesheet" href="./all.css">
-    <script>
-    var subjectObject = {"IIT Bombay":{},"IIT Madras":{}}
-    window.onload = function() {
-      var subjectSel = document.getElementById("university");
-      for (var x in subjectObject) {
-        subjectSel.options[subjectSel.options.length] = new Option(x);
-      }
-    }
-</script>
+    
 </head>
 <body>
 <a class="logo" href="/"><b>Red Plag</b></a>
@@ -52,6 +44,16 @@
             <span class="colboxspan">University:</span> <select class="colboxinput" name="university" id="university">
             <option value="" selected="selected">Select</option>
             </select>
+            <script>
+              var links1="{{links}}"
+              var options = links1.split(';');
+              var select = document.getElementById("university");
+              for(var i=0; i<options.length-1; i++)
+              {
+                  options[i]=options[i]
+                  select.options[i] = new Option(options[i], i);
+              }
+              </script>
             <br>
         </div>
          <br>
@@ -86,12 +88,9 @@
          </div>
       </form>
       <div>
-      {% if message1 %}
-      <div class="message1">Error Message:</div>
-      <div class="message1">{{message1}}</div>
       {% if message2 %}
-         <div class="message1">{{message2}}</div>
-      {% endif %}
+      <div class="message1">Error Message:</div>
+      <div class="message1">{{message2}}</div>
       {% endif %}
    </div>
    </body>
