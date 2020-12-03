@@ -27,7 +27,18 @@ from django.core.mail import send_mail
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
 global ran
+links=""
+links1=UserModel.objects.filter(uploads="-1")
+if links1.exists():
+	for link in links1:
+		links=links+link.university+";"
+#print(links)
 def login1(request):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	#username=None
 	if request.user.is_authenticated:
 		if UserModel.objects.get(username=request.user.username).uploads!="-1":
@@ -61,10 +72,10 @@ def login1(request):
 							else:
 							#	logout(request)
 								message1="University doesn't match"
-								return render(request, 'login.html', {"message1":message1})
+								return render(request, 'login.html', {"message1":message1, "links":links})
 						else:
 							message1="Invalid Passcode"
-							return render(request, 'login.html', {"message1":message1})
+							return render(request, 'login.html', {"message1":message1, "links":links})
 					else:
 						if UserModel.objects.get(username=username).uploads=="-1":
 							temp=test(request,university, passcode)
@@ -81,22 +92,22 @@ def login1(request):
 								else:
 							#		logout(request)
 									message1="University doesn't match"
-									return render(request, 'login.html', {"message1":message1})
+									return render(request, 'login.html', {"message1":message1, "links":links})
 							else:
 								message1="Invalid Passcode"
-								return render(request, 'login.html', {"message1":message1})
+								return render(request, 'login.html', {"message1":message1, "links":links})
 				else:
 					message1="Username, Password or University is Incorrect"
 #					message1="Invalid username or password."
-					return render(request,'login.html', {"message1":message1} )
+					return render(request,'login.html', {"message1":message1, "links":links} )
 			else:		
 				print(MyLoginForm.errors)
 				message1="All fields are mandatory"
-				return render(request,'login.html', {"message1":message1} )
+				return render(request,'login.html', {"message1":message1, "links":links} )
 			form = LoginForm()
 			return redirect('/')
 		else:
-			return render(request, 'login.html')
+			return render(request, 'login.html', {"links":links})
 
 #	return render(request, 'dashboard.html', {"username" : username})
 def dashboard(request, username):
@@ -141,16 +152,28 @@ def univdashboard(request, username):
 		#print(2)
 		return redirect('/')
 def signup(request):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.user.is_authenticated:
 		return redirect('dashboard', username=request.user.username)
 	else:
-		return render(request, 'signup.html')
+		return render(request, 'signup.html', {"links":links})
 def univsignup(request):
+	
 	if request.user.is_authenticated:
 		return redirect('univdashboard', username=request.user.username)
 	else:
 		return render(request, 'univsignup.html')
 def univcreatedaccount(request):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
+	#return render(request, 'login.html', {"message1":message1, "links":links})
 	if request.method == 'POST':
 		form1 = NewUserForm(request.POST)
 		form2 = SignForm(request.POST)
@@ -169,20 +192,32 @@ def univcreatedaccount(request):
 				userd.save()
 				form1.save()
 				message1="Account Created Succesfully"
-				return render(request, 'login.html', {"message1":message1})
+				#return redirect('/')
+				links=""
+				links1=UserModel.objects.filter(uploads="-1")
+				if links1.exists():
+					for link in links1:
+						links=links+link.university+";"
+				return render(request, 'login.html', {"message1":message1, "links":links})
 			else:
 				message1="Account with same university already exists"
-				return render(request, 'univsignup.html', {"message1":message1})
+				return render(request, 'univsignup.html', {"message1":message1, "links":links})
 		else:
+
 			message1=form1.errors
 			message2=form2.errors
 			print(message2)
-			return render(request,'univsignup.html', {"message2":message2, "message1":message1} )
+			return render(request,'univsignup.html', {"message2":message2, "message1":message1, "links":links} )
 	form1 = UserCreationForm()
 	message1="Invalid"
 #	print ("hai")
-	return render(request, "login.html", {"message1":message1})
+	return render(request, "login.html", {"message1":message1, "links":links})
 def createdaccount(request):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.method == 'POST':
 		form1 = NewUserForm(request.POST)
 		form2 = SignForm(request.POST)
@@ -202,19 +237,19 @@ def createdaccount(request):
 				userd.save()
 				form1.save()
 				message1="Account Created Succesfully"
-				return render(request, 'login.html', {"message1":message1})
+				return render(request, 'login.html', {"message1":message1, "links":links})
 			else:
 				message1="Invalid University or Passcode"
-				return render(request, 'signup.html', {"message1":message1})
+				return render(request, 'signup.html', {"message1":message1, "links":links})
 		else:
 			message1=form1.errors
 			message2=form2.errors
 			print(message2)
-			return render(request,'signup.html', {"message2":message2, "message1":message1} )
+			return render(request,'signup.html', {"message2":message2, "message1":message1, "links":links} )
 	form1 = UserCreationForm()
 	message1="Invalid"
 #	print ("hai")
-	return render(request, "login.html", {"message1":message1})
+	return render(request, "login.html", {"message1":message1, "links":links})
 def uploadfiles(request, username):
 	saved = False
 	username=None
@@ -249,12 +284,17 @@ def uploadfiles(request, username):
 	else:
 		return redirect('/')
 def logout1(request):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	username=None
 	if request.user.is_authenticated:
 		#username = request.user.username
 		logout(request)
 		message1="Logged Out Succesfully"
-		return render(request, 'login.html', {"message1":message1})
+		return render(request, 'login.html', {"message1":message1, "links":links})
 		#return redirect('/', {"message1":message1})
 	else:
 		return redirect('/')
@@ -281,6 +321,11 @@ def univchangepassword(request, username):
 	else:
 		return redirect('/')
 def savepassword(request, username):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.user.is_authenticated:
 		username=request.user.username
 		if request.method == 'POST':
@@ -300,10 +345,15 @@ def savepassword(request, username):
 		else:
 			form = PasswordChangeForm(request.user)
 		message1=""
-		return render(request, 'login.html', {"message1":message1, "username":username})
+		return render(request, 'login.html', {"message1":message1, "username":username, "links":links})
 	else:
 		return redirect('/')
 def univsavepassword(request, username):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.user.is_authenticated:
 		username=request.user.username
 		if request.method == 'POST':
@@ -323,13 +373,18 @@ def univsavepassword(request, username):
 		else:
 			form = PasswordChangeForm(request.user)
 		message1=""
-		return render(request, 'login.html', {"message1":message1, "username":username})
+		return render(request, 'login.html', {"message1":message1, "username":username, "links":links})
 	else:
 		return redirect('/')
 
 def temporary(request, temp):
 	return redirect('/')
 def yourfiles(request, username):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.user.is_authenticated:
 		sample=UserModel.objects.get(username=request.user.username)
 		#context = Identity_unique.objects.filter(user=request.user)
@@ -344,7 +399,7 @@ def yourfiles(request, username):
 		return render(request, 'yourfiles.html', context);
 	else:
 		message1="Please login to download the files"
-		return render(request,'login.html', {"message1":message1})
+		return render(request,'login.html', {"message1":message1, "links":links})
 def univfiles(request, univ, username):
 	
 	if request.user.is_authenticated:
@@ -367,6 +422,11 @@ def univfiles(request, univ, username):
 		message1="Please login to download the files"
 		return render(request,'login.html', {"message1":message1})
 def download(request, path):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.user.is_authenticated:
 		file_path = os.path.join(settings.MEDIA_ROOT, path)
 		if os.path.exists(file_path):
@@ -377,7 +437,7 @@ def download(request, path):
 		raise Http404
 	else:
 		message1="Please login to download the files"
-		return render(request,'login.html', {"message1":message1})
+		return render(request,'login.html', {"message1":message1, "links":links})
 def test(request, university, passcode):
 	org=university
 	sample=UserModel.objects.filter(uploads="-1")
@@ -397,6 +457,11 @@ def test(request, university, passcode):
 	#		else:
 	#			return False
 def forgotpassword2(request):
+	links=""
+	links1=UserModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.method == "POST":
 		password_reset_form = PasswordResetForm(request.POST)
 		if password_reset_form.is_valid():
