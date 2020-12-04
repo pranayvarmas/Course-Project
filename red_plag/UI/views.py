@@ -200,8 +200,8 @@ def univcreatedaccount(request):
 						links=links+link.university+";"
 				return render(request, 'login.html', {"message1":message1, "links":links})
 			else:
-				message1="Account with same university already exists"
-				return render(request, 'univsignup.html', {"message1":message1, "links":links})
+				message2="Account with same university already exists"
+				return render(request, 'univsignup.html', {"message2":message2, "links":links})
 		else:
 
 			message1=form1.errors
@@ -239,8 +239,8 @@ def createdaccount(request):
 				message1="Account Created Succesfully"
 				return render(request, 'login.html', {"message1":message1, "links":links})
 			else:
-				message1="Invalid University or Passcode"
-				return render(request, 'signup.html', {"message1":message1, "links":links})
+				message2="Invalid University or Passcode"
+				return render(request, 'signup.html', {"message2":message2, "links":links})
 		else:
 			message1=form1.errors
 			message2=form2.errors
