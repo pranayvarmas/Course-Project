@@ -26,7 +26,11 @@ from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
-global ran
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+@ensure_csrf_cookie
+@csrf_protect
+#global ran
 
 def login1(request):
 	links=""
@@ -318,10 +322,11 @@ def uploadfiles(request, username):
 					i=i+1
 #					print(i)
 					first=request.user
-					sample=UserModel.objects.get(username=username)
+					sample=UserModel.objects.get(username=request.user.username)
 					sample.uploads=sample.uploads+str(i)+";"
 					sample.save()
 					message1="Successfully Uploaded"
+					return render(request, 'dashboard.html', {"message1":message1, "username":username}) 
 				else:
 					message1="No file Uploaded"
 #					print(MyProfileForm.errors)
@@ -448,6 +453,7 @@ def yourfiles(request, username):
 	if request.user.is_authenticated:
 		if UserModel.objects.filter(username=request.user.username).exists():
 			#context = Identity_unique.objects.filter(user=request.user)
+			sample = UserModel.objects.get(username=request.user.username)
 			s=sample.uploads
 			#s="1;2;3;4;5;6;7;8;9;0;10;11;12;13;14;15;16;17;18;19;20;"
 			t=s.split(";")
