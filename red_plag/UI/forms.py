@@ -48,5 +48,7 @@ class PasswordResetForm(forms.Form):
     #username=forms.CharField(max_length=100)
     #university=forms.CharField(max_length=100)
     email=forms.EmailField(max_length=100)
-class OtpForm(forms.Form):
-    otp=forms.IntegerField(max_value=100)
+class PasscodeForm(forms.Form):
+    passcode0=forms.IntegerField(max_value=999999)
+    passcode1=forms.IntegerField(max_value=999999)
+    passcode2=forms.IntegerField(max_value=999999)

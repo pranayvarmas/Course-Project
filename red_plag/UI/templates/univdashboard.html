@@ -12,14 +12,24 @@
 <hr class="hr1">
 <p class="heading">Logged in as {{username}}</p>
       <br>
+      <p class="message1">{{message2}}</p>
       <p class="heading2">Welcome {{username}}</p>
       <p class="message1">{{message1}}</p>
       <p class="details">{{details}}</p>
       <p>Usernames of users logged in with your university name is shown above</p>
       <p>You can access uploaded files of individual users by going to "/{{username}}/user.username/univfiles/"</p>
+      <form action="/{{username}}/changepasscode/">
+      <div class="columnbutton" >
+               <button class="colbutton" type = "submit"value = "changepasscode" >
+                  <div class="colbuttext">
+                  <strong>Change Passcode</strong>
+              </div>
+               </button>
+         </div>
+      </form>
       <form action="/{{username}}/changepassword/">
       <div class="columnbutton" >
-               <button class="colbutton" type = "submit"value = "logout" >
+               <button class="colbutton" type = "submit"value = "changepassword" >
                   <div class="colbuttext">
                   <strong>Change Password</strong>
               </div>

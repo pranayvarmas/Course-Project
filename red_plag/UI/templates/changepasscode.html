@@ -1,0 +1,68 @@
+<html>
+<head>
+   <meta charset="UTF-8">
+    <title> Red Plag </title>
+    <link rel="stylesheet" href="all.css">
+</head>
+<body>
+<a class="logo" href="/"><b>Red Plag</b></a>
+<a class="logoside" href="/">Team 779499120</a>
+<br>
+<br>
+<hr class="hr1">
+<p class="heading">Passcode Change Form</p>
+
+      <br>
+   	
+      <form name = "form" action = "/{{username}}/savepasscode/"method = "post" >{% csrf_token %}
+         
+         <div class="column">
+            <span class="colspan" >Old Passcode:</span>
+               <input type = "password" class="colinput"
+                  placeholder = "old passcode" name = "passcode0" />
+         </div>
+			
+         <br>
+         
+         <div class="column">
+            <span class="colspan" >New Passcode:</span>
+               <input type = "password" class="colinput" 
+                  placeholder = "new passcode" name = "passcode1" />
+         </div>
+			
+         <br>
+         <div class="column">
+            <span class="colspan" >Passcode(again):</span>
+               <input type = "password" class="colinput"
+                  placeholder = "new passcode (again)" name = "passcode2" />
+         </div>
+			
+         <br>
+         <div class="columnbutton">
+            
+               <button class="colbutton"  type = "submit" 
+                  value = "Login" >
+                  <div class="colbuttext">
+                  <strong>Change</strong>
+              </div>
+               </button>
+         </div>
+      </form> 
+      <form action="/{{username}}/univdashboard/">
+      <div class="columnbutton">
+               <button class="colbutton"  type = "home" 
+                  value = "home" >
+                  <div class="colbuttext">
+                  <strong>Home</strong>
+              </div>
+               </button>
+         </div>
+     </form>
+     <div class="message1">
+      {% if message2 %}
+      <div class="message1">{{message1}}</div>
+      <div class="message1">{{message2}}</div>
+      {% endif %}  
+   </div>
+   </body>
+</html>
