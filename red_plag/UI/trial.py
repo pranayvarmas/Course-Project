@@ -44,42 +44,51 @@ for file in files:
         lengths.append(len(freq))
 #print(word_count_vector)
 #print(lengths)
+if(len(lengths)==0):
+    print("ADD ARGUMENTS")
+if(len(lengths)!=0):
 final_length = max(lengths)
-for w in word_count_vector:
-    if (len(w) == final_length):
-        w.sort()
-        continue
-    else:
-        num = final_length - len(w)
-        for i in range(num):
-            w.append(0)
-        w.sort()
+    for w in word_count_vector:
+        if (len(w) == final_length):
+            w.sort()
+            continue
+        else:
+            num = final_length - len(w)
+            for i in range(num):
+                w.append(0)
+            w.sort()
 
 #print(word_count_vector)
-final_word_count = [[] for j in range(final_length)]
+    final_word_count = [[] for j in range(final_length)]
 
-for w in word_count_vector:
-    for i in range(final_length):
-        final_word_count[i].append(w[i])
+    for w in word_count_vector:
+        for i in range(final_length):
+            final_word_count[i].append(w[i])
 
-means = [np.mean(np.array(final_word_count[j])) for j in range(final_length)]
-stds = [np.std(np.array(final_word_count[j])) for j in range(final_length)]
+    means = [np.mean(np.array(final_word_count[j])) for j in range(final_length)]
+    stds = [np.std(np.array(final_word_count[j])) for j in range(final_length)]
 #print(means)
 #print(stds)
-for w in word_count_vector:
-    for i in range(final_length):
-        if (stds[i] == 0):
-            continue
-        w[i] = (w[i] - means[i])/stds[i]
+    for w in word_count_vector:
+        for i in range(final_length):
+            if (stds[i] == 0):
+                continue
+            w[i] = (w[i] - means[i])/stds[i]
 
 #print(word_count_vector)
-an = [0 for i in range(len(word_count_vector))]
-ad = [an for i in range(len(word_count_vector))]
-final = np.array(ad, dtype=float)
-for i in range(len(word_count_vector)):
-    for j in range(len(word_count_vector)):
-        val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
-        final[i][j] = val
+    an = [0 for i in range(len(word_count_vector))]
+    ad = [an for i in range(len(word_count_vector))]
+    final = np.array(ad, dtype=float)
+    for i in range(len(word_count_vector)):
+        for j in range(len(word_count_vector)):
+            val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            final[i][j] = val
 print(final)
 #print(np.dot(np.array(word_count_vector[0]), np.array(word_count_vector[0])) / (np.linalg.norm(np.array(word_count_vector[0]))*np.linalg.norm(np.array(word_count_vector[0]))))
-
+file = open('comparision.csv', 'wb')
+file1 = open('comparision.csv', 'a+', newline ='')
+  
+# writing the data into the file 
+with file1:
+    write = csv.writer(file1) 
+    write.writerows(final) 
