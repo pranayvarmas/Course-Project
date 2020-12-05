@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import render
 from .forms import NewUserForm
-from UI.forms import ProfileForm,SignForm, PasswordResetForm
+from UI.forms import ProfileForm,SignForm, PasswordResetForm, PasscodeForm
 from UI.models import Profile, UserModel, UniversityModel
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
@@ -133,7 +133,7 @@ def dashboard(request, username):
 def univdashboard(request, username):
 	#username=None
 	if request.user.is_authenticated:
-		if UniversityModel.objects.get(username=request.user.username).exists():
+		if UniversityModel.objects.filter(username=request.user.username).exists():
 			sample=UniversityModel.objects.get(username=username)
 			university=sample.university
 			sample2=UserModel.objects.filter(university=university)
@@ -301,14 +301,17 @@ def createdaccount(request):
 def uploadfiles(request, username):
 	saved = False
 	username=None
+	#print(1)
 	if request.user.is_authenticated:
 		if UserModel.objects.filter(username=request.user.username).exists():
+			#print(1)
 			username = request.user.username
 			if request.method == "POST":
       #Get the posted form
 				MyProfileForm = ProfileForm(request.POST, request.FILES)
 
 				if MyProfileForm.is_valid():
+					print(1)
 					profile = Profile()
 					#profile.name = MyProfileForm.cleaned_data["name"]
 					profile.picture = MyProfileForm.cleaned_data["picture"]
@@ -322,13 +325,14 @@ def uploadfiles(request, username):
 					sample.uploads=sample.uploads+str(i)+";"
 					sample.save()
 					message1="Successfully Uploaded"
+					return render(request, 'dashboard.html', {"message1":message1, "username":username})
 				else:
 					message1="No file Uploaded"
 #					print(MyProfileForm.errors)
 
 					return render(request, 'dashboard.html', {"message1":message1, "username":username})
 			else:
-				MyProfileForm = Profileform()
+				#MyProfileForm = Profileform()
 				return render(request, 'dashboard.html', {"message1":message1, "username":username} )
 		else:
 			return redirect('/')
@@ -447,6 +451,7 @@ def yourfiles(request, username):
 			links=links+link.university+";"
 	if request.user.is_authenticated:
 		if UserModel.objects.filter(username=request.user.username).exists():
+			sample=UserModel.objects.get(username=request.user.username)
 			#context = Identity_unique.objects.filter(user=request.user)
 			s=sample.uploads
 			#s="1;2;3;4;5;6;7;8;9;0;10;11;12;13;14;15;16;17;18;19;20;"
@@ -587,3 +592,88 @@ def resetpassword(request):
 			global ran
 			if otp==ran:
 				pass
+def changepasscode(request, username):
+	if request.user.is_authenticated:
+		if UniversityModel.objects.filter(username=request.user.username).exists():
+			username1 = request.user.username
+			if(username1==username):
+				message1=""
+				return render(request, 'changepasscode.html', {"username":username1})
+			else:
+				return redirect('/')
+		else:
+			return redirect('/')
+	return redirect('/')
+def savepasscode(request, username):
+	links=""
+	links1=UniversityModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
+	if request.user.is_authenticated:
+		if UniversityModel.objects.filter(username=request.user.username).exists():
+			sample=UniversityModel.objects.get(username=request.user.username)
+			username=request.user.username
+			if request.method == 'POST':
+				form = PasscodeForm(request.POST)
+				if form.is_valid():
+					passcode0=form.cleaned_data['passcode0']
+					passcode1=form.cleaned_data['passcode1']
+					passcode2=form.cleaned_data['passcode2']
+					if(sample.passcode==passcode0):
+						if(passcode1==passcode2):
+							sample.passcode=passcode1
+							sample.save()
+							return render(request, 'univdashboard.html', {"message1":"Passcode successfully updated", "username":request.user.username})
+						else:
+							message1="Error Messages"
+							message2="New passcodes don't match"
+							return render(request, 'changepasscode.html', {"message1":message1, "message2":message2, "username":request.user.username})
+					else:
+						message1="Error Messages"
+						message2="Old Passcode doesn't match"
+						return render(request, 'changepasscode.html', {"message1":message1, "message2":message2, "username":request.user.username})
+				else:
+					message1="Error Messages:"
+					message2=form.errors
+					return render(request, 'changepasscode.html', {"message1":message1, "message2":message2, "username":username})
+			else:
+				#form = PasswordChangeForm(request.user)
+				#message1=""
+				return render(request, 'changepasscode.html', {"username":username})
+		else:
+			return redirect('/')
+	else:
+		return redirect('/')
+#def orga(request):
+#	if request.user.is_authenticated:
+#		username=request.user.username
+#		return render(request, 'organization.html', {"username":username})
+#	else:
+#		message1="Please login to enter Organization Passcode"
+#		return render(request, 'login.html', {"message1":message1})
+#def org(request):
+#	if request.user.is_authenticated:
+#		username=request.user.username
+#		if request.method=="POST":
+#			form=passcod(request.POST)
+#			if form.is_valid():
+#				passcode=form.cleaned_data["passcode"]
+#				if(passcode==123456):
+#					return render(request, 'dashboard.html', {"username":username})
+#				else:
+#					message1="Organization Passcode is incorrect"
+#					return render(request, 'organization.html', {"username":username, "message1":message1})
+#			else:
+#				print(form.errors)
+#				message1="Organization Passcode is Invalid"
+#				return render(request, 'organization.html', {"username":username, "message1":message1})
+#		else:
+#			form=passcod()
+#			message1="Organization Passcode is Invalid"
+#			logoutin(request)
+#			return render(request, 'login.html', {"message1":message1})
+#	else:
+#		message1="Please login to enter Organization Passcode"
+#		return render(request, 'login.html', {"message1":message1})
+
