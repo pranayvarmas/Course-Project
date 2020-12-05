@@ -175,6 +175,11 @@ def signup(request):
 	else:
 		return render(request, 'signup.html', {"links":links})
 def univsignup(request):
+	links=""
+	links1=UniversityModel.objects.filter(uploads="-1")
+	if links1.exists():
+		for link in links1:
+			links=links+link.university+";"
 	if request.user.is_authenticated:
 		if UserModel.objects.get(username=request.user.username).exists():
 			return redirect('dashboard', username=request.user.username)
