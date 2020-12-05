@@ -26,10 +26,6 @@ from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
-from django.views.decorators.csrf import ensure_csrf_cookie
-
-@ensure_csrf_cookie
-@csrf_protect
 #global ran
 
 def login1(request):
@@ -329,11 +325,7 @@ def uploadfiles(request, username):
 					sample.uploads=sample.uploads+str(i)+";"
 					sample.save()
 					message1="Successfully Uploaded"
-<<<<<<< HEAD
-					return render(request, 'dashboard.html', {"message1":message1, "username":username}) 
-=======
 					return render(request, 'dashboard.html', {"message1":message1, "username":username})
->>>>>>> 28cce0b2f194555bc63035855f2cfd376f9c44bd
 				else:
 					message1="No file Uploaded"
 #					print(MyProfileForm.errors)
