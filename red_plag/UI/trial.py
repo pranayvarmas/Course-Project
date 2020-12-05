@@ -5,10 +5,10 @@ import zipfile
 import csv
 from os import listdir
 from os.path import isfile, join
-
-with zipfile.ZipFile(sys.argv[1], 'r') as zip_ref:
-    zip_ref.extractall('.')
-files = [join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f) for f in listdir(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4]) if isfile(join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f))]
+if(len(sys.argv)>1):
+    with zipfile.ZipFile(sys.argv[1], 'r') as zip_ref:
+        zip_ref.extractall('.')
+    files = [join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f) for f in listdir(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4]) if isfile(join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f))]
 
 lines = []
 word_count_vector = []
@@ -45,7 +45,7 @@ for file in files:
         lengths.append(len(freq))
 #print(word_count_vector)
 #print(lengths)
-if(len(lengths)==0):
+if(len(sys.argv)<=1):
     print("ADD ARGUMENTS")
 if(len(lengths)!=0):
     final_length = max(lengths)
@@ -82,14 +82,38 @@ if(len(lengths)!=0):
     final = np.array(ad, dtype=float)
     for i in range(len(word_count_vector)):
         for j in range(len(word_count_vector)):
-            val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+                val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+                val = 1
             final[i][j] = val
 print(final)
+final = final.astype('str')
 #print(np.dot(np.array(word_count_vector[0]), np.array(word_count_vector[0])) / (np.linalg.norm(np.array(word_count_vector[0]))*np.linalg.norm(np.array(word_count_vector[0]))))
 file = open('comparision.csv', 'wb')
 file1 = open('comparision.csv', 'a+', newline ='')
-  
-# writing the data into the file 
+l = [i for i in range(0,len(lengths)+1)]
+for i in range(0, len(l)):
+    if(i==0):
+        l[i] = 'files'
+    if(i!=0): 
+        l[i] = 'w.r.t file'+str(l[i])
+arr = [i for i in range(1,len(lengths)+1)]
+for i in range(0,len(arr)):
+    arr[i] = 'file' + str(arr[i])
+print(arr)
+arr = np.array(arr)
+result = np.hstack((final, np.atleast_2d(arr).T))
+for i in range(len(lengths)):
+    result[:, [len(lengths)-i, len(lengths)-i-1]] = result[:, [len(lengths)-i-1, len(lengths)-i]]
+print(result) 
+# writing the data into the file
+i=0
 with file1:
-    write = csv.writer(file1) 
-    write.writerows(final) 
+    if(i==0):
+        write = csv.writer(file1) 
+        write.writerow(l) 
+        i=1
+    if(i!=0):        
+        write = csv.writer(file1) 
+        write.writerows(result)
