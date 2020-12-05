@@ -8,7 +8,7 @@ from os.path import isfile, join
 
 with zipfile.ZipFile(sys.argv[1], 'r') as zip_ref:
     zip_ref.extractall('.')
-files = [f for f in listdir(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4]) if isfile(join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f))]
+files = [join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f) for f in listdir(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4]) if isfile(join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f))]
 
 lines = []
 word_count_vector = []
