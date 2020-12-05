@@ -585,6 +585,7 @@ def forgotpassword2(request):
 def forgotpassword1(request):
 	return render(request, 'forgotpassword1.html')
 def resetpassword(request):
+	return redirect('/')
 	if request.method=="POST":
 		reset_form=OtpForm(request.POST)
 		if reset_form.is_valid():
