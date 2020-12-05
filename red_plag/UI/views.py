@@ -624,7 +624,7 @@ def savepasscode(request, username):
 						if(passcode1==passcode2):
 							sample.passcode=passcode1
 							sample.save()
-							return render(request, 'univdashboard.html', {"message2":"Passcode successfully updated", "username":request.user.username})
+							return redirect('univdashboard',username=request.user.username)
 						else:
 							message1="Error Messages"
 							message2="New passcodes don't match"
