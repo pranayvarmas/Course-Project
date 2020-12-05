@@ -2,6 +2,7 @@ import sys
 import numpy as np
 import re
 import zipfile
+import csv
 from os import listdir
 from os.path import isfile, join
 
@@ -47,7 +48,7 @@ for file in files:
 if(len(lengths)==0):
     print("ADD ARGUMENTS")
 if(len(lengths)!=0):
-final_length = max(lengths)
+    final_length = max(lengths)
     for w in word_count_vector:
         if (len(w) == final_length):
             w.sort()
