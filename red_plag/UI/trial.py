@@ -6,8 +6,9 @@ from os import listdir
 from os.path import isfile, join
 
 with zipfile.ZipFile(sys.argv[1], 'r') as zip_ref:
-    zip_ref.extractall(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4])
+    zip_ref.extractall('.')
 files = [f for f in listdir(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4]) if isfile(join(sys.argv[1].__str__()[0:len(sys.argv[1].__str__())-4], f))]
+
 lines = []
 word_count_vector = []
 lengths = []
@@ -42,6 +43,7 @@ for file in files:
         word_count_vector.append(list(freq.values()))
         lengths.append(len(freq))
 #print(word_count_vector)
+#print(lengths)
 final_length = max(lengths)
 for w in word_count_vector:
     if (len(w) == final_length):
@@ -80,3 +82,4 @@ for i in range(len(word_count_vector)):
         final[i][j] = val
 print(final)
 #print(np.dot(np.array(word_count_vector[0]), np.array(word_count_vector[0])) / (np.linalg.norm(np.array(word_count_vector[0]))*np.linalg.norm(np.array(word_count_vector[0]))))
+
