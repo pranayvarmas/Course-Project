@@ -51,21 +51,24 @@ for file in files:
         ind7 = data.find("int main")
         #print(ind7)
         globa = data[0:ind7]
+        globa = globa + "{"
         functions = {}
         ind = globa.find("{")
         #print(ind)
         #count = 0
         #print(len(globa))
         while (ind != -1):
+            if (globa[(ind+1):].find("}")==-1):
+               break
             if (globa[(ind+1):].find("{") < globa[(ind+1):].find("}")):
-                ind1 = ind+1 + globa[(ind+1):].find("}")
+                ind1 = ind
                 #print(ind1, "hi")
                 while (globa[(ind1+1):].find("{") < globa[(ind1+1):].find("}")):
                     #print
-                    count=globa[(ind1+1):].find("}")
-                    k=1
-                    while (globa[(ind1+1):].find("{") < count):
-                        count=count-globa[(ind1+1):].find("{")
+                    count=ind1+1+globa[(ind1+1):].find("}")
+                    k=0
+                    while (ind1+1+globa[(ind1+1):].find("{") < count):
+                        #count=count-globa[(ind1+1):].find("{")
                         ind1 = ind1+1 + globa[(ind1+1):].find("{")
                         k=k+1
                         #print k
@@ -75,7 +78,7 @@ for file in files:
                 ind1 = ind1+1 + globa[(ind1+1):].find("}")
                 #print(ind1)
             else:
-                ind1 = ind1+1 + globa[(ind+1):].find("}")
+                ind1 = ind+1 + globa[(ind+1):].find("}")
                 #print(ind1)
             #print(ind1)
             #print(ind, "ind")
