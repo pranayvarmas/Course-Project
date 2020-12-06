@@ -61,8 +61,16 @@ for file in files:
                 ind1 = ind+1 + globa[(ind+1):].find("}")
                 #print(ind1, "hi")
                 while (globa[(ind1+1):].find("{") < globa[(ind1+1):].find("}")):
-                    #print("ho")
-                    ind1 = ind1+1 + globa[(ind1+1):].find("}")
+                    #print
+                    count=globa[(ind1+1):].find("}")
+                    k=1
+                    while (globa[(ind1+1):].find("{") < count):
+                        count=count-globa[(ind1+1):].find("{")
+                        ind1 = ind1+1 + globa[(ind1+1):].find("{")
+                        k=k+1
+                        #print k
+                    for i in range(k):
+                        ind1 = ind1+1 + globa[(ind1+1):].find("}")
                     #print(ind1)
                 ind1 = ind1+1 + globa[(ind1+1):].find("}")
                 #print(ind1)
