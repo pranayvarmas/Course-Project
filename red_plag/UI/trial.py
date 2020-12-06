@@ -5,7 +5,9 @@ import zipfile
 import csv
 from os import listdir
 from os.path import isfile, join
+x = 0
 def unzip(fil):
+    
     with zipfile.ZipFile(fil, 'r') as zip_ref:
         zip_ref.extractall('.')
     files = [join(fil.__str__()[0:len(fil.__str__())-4], f) for f in listdir(fil.__str__()[0:len(fil.__str__())-4]) if isfile(join(fil.__str__()[0:len(fil.__str__())-4], f))]
@@ -25,6 +27,9 @@ def eliminate_comments(dat):
         if (ind != -1) :
             dat[i] = dat[i][0:ind] + "\n"
     return dat
+def set_globvar(lengths):
+    global x   # Needed to modify global copy of globvar
+    x = len(lengths)
 def find_signature(files):
     word_count_vector = []
     lengths = []
@@ -49,6 +54,7 @@ def find_signature(files):
             freq.pop('')
             word_count_vector.append(list(freq.values()))
             lengths.append(len(freq))
+            set_globvar(lengths)
     return [word_count_vector, lengths]
 #print(word_count_vector)
 #print(lengths)
@@ -78,6 +84,7 @@ def normalize(word_count_vector, final_length):
 #print(means)
 #print(stds)
     for w in word_count_vector:
+
         for i in range(final_length):
             if (stds[i] == 0):
                 continue
@@ -90,7 +97,10 @@ def similar(word_count_vector):
     final = np.array(ad, dtype=float)
     for i in range(len(word_count_vector)):
         for j in range(len(word_count_vector)):
-            val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+                val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+                val=1;
             final[i][j] = val
     return final
 
@@ -104,14 +114,36 @@ def evaluate(zip):
     return final
 #print(np.dot(np.array(word_count_vector[0]), np.array(word_count_vector[0])) / (np.linalg.norm(np.array(word_count_vector[0]))*np.linalg.norm(np.array(word_count_vector[0]))))
 final = evaluate(sys.argv[1])
+print(x)
 def csv_write(final):
     file = open('comparision.csv', 'wb')
     file1 = open('comparision.csv', 'a+', newline ='')
-
 # writing the data into the file
+    l = [i for i in range(0,x+1)]
+    for i in range(0, len(l)):
+        if(i==0):
+            l[i] = 'files'
+        if(i!=0): 
+            l[i] = 'w.r.t file'+str(l[i])
+    arr = [i for i in range(1,x+1)]
+    for i in range(0,len(arr)):
+        arr[i] = 'file' + str(arr[i])
+    arr = np.array(arr)
+    print(arr)
+    result = np.hstack((final, np.atleast_2d(arr).T))
+    for i in range(x):
+        result[:, [x-i, x-i-1]] = result[:, [x-i-1, x-i]]
+    print(result) 
+# writing the data into the file
+    i=0
     with file1:
-        write = csv.writer(file1)
-        write.writerows(final)
-
+        if(i==0):
+            write = csv.writer(file1) 
+            write.writerow(l) 
+            i=1
+        if(i!=0):        
+            write = csv.writer(file1) 
+            write.writerows(result)
+final = final.astype('str')
 csv_write(final)
 
