@@ -412,7 +412,7 @@ def uploadfiles(request, username):
 					return render(request, 'dashboard.html', {"message1":message1, "username":username})
 			else:
 				#MyProfileForm = Profileform()
-				return render(request, 'dashboard.html', {"message1":message1, "username":username} )
+				return render(request, 'dashboard.html', {"username":username} )
 		else:
 			return redirect('/')
 	else:
