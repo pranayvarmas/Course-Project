@@ -120,8 +120,8 @@ zip = zipfile.ZipFile(sys.argv[1])
 LIST = zip.namelist()[:]
 del LIST[0]
 def csv_write(final):
-    file = open('comparision.csv', 'wb')
-    file1 = open('comparision.csv', 'a+', newline ='')
+    file = open('REDPLAG.csv', 'wb')
+    file1 = open('REDPLAG.csv', 'a+', newline ='')
 # writing the data into the file
     l = [i for i in range(0,x+1)]
     for i in range(0, len(l)):
@@ -147,23 +147,20 @@ def csv_write(final):
             write = csv.writer(file1) 
             write.writerows(result)
 def plots(final):
+    fig = plt.figure()
     ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
     ax.set_xticks(np.arange(len(LIST)))
     ax.set_yticks(np.arange(len(LIST)))
 # ... and label them with the respective list entries
     ax.set_xticklabels(LIST)
     ax.set_yticklabels(LIST)
-
+    ax.set_title("RESULT")
 # Rotate the tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
          rotation_mode="anchor")
     plt.setp(ax.get_yticklabels(), rotation=360, ha="right",
         rotation_mode="anchor")
-
-    plt.show()
-
-# Loop over data dimensions and create text annotations.
-    ax.set_title("RESULT")
+    fig.savefig('REDPLAG.png', bbox_inches='tight', dpi=150)
     plt.show()
 plots(final)
 final = final.astype('str')
