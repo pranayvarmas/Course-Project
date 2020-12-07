@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import render
+#from django.shortcuts import render
 from .forms import NewUserForm
 from UI.forms import ProfileForm,SignForm, PasswordResetForm, PasscodeForm
 from UI.models import Profile, UserModel, UniversityModel
@@ -26,7 +26,31 @@ from django.template.loader import render_to_string, get_template
 from django.core.mail import send_mail
 from django.core.mail import BadHeaderError, send_mail
 from django.http import HttpResponse, HttpResponseRedirect
-#global ran
+#from new import myfunc
+from shutil import copyfile
+import pathlib
+import csv
+import zipfile
+from os import listdir
+from os.path import isfile, join
+import shutil
+import glob
+#import mimetypes
+import time
+import sys ,os
+import numpy as np
+import tarfile
+import re
+import zipfile
+import csv
+import matplotlib.pyplot as plt
+import seaborn as sns
+from os import listdir
+from os.path import isfile, join
+#import UI.cplusplus
+#from UI import cplusplus
+x=0
+global ran
 
 def login1(request):
 	links=""
@@ -105,7 +129,7 @@ def login1(request):
 #					message1="Invalid username or password."
 					return render(request,'login.html', {"message1":message1, "links":links} )
 			else:		
-				print(MyLoginForm.errors)
+				#print(MyLoginForm.errors)
 				message1="All fields are mandatory"
 				return render(request,'login.html', {"message1":message1, "links":links} )
 			form = LoginForm()
@@ -272,8 +296,8 @@ def createdaccount(request):
 						userd.passcode=form2.cleaned_data['passcode']
 						#userd.set_password(form2.cleaned_data['password1'])
 						#if form2.cleaned_data['password1']==form2.cleaned_data['password2']:
-			 			#userd.password=form2.cleaned_data['password1']
-			   			#userd.uploads=""
+						#userd.password=form2.cleaned_data['password1']
+						#userd.uploads=""
 						userd.save()
 						form1.save()
 						message1="Account Created Succesfully"
@@ -298,6 +322,8 @@ def createdaccount(request):
 #	print ("hai")
 	#return render(request, "login.html", {"message1":message1, "links":links})
 	return redirect('/')
+file1=pathlib.Path('')
+name=None
 def uploadfiles(request, username):
 	saved = False
 	username=None
@@ -307,25 +333,78 @@ def uploadfiles(request, username):
 			#print(1)
 			username = request.user.username
 			if request.method == "POST":
-      #Get the posted form
+	  #Get the posted form
 				MyProfileForm = ProfileForm(request.POST, request.FILES)
 
 				if MyProfileForm.is_valid():
-					print(1)
+					#print(1)
 					profile = Profile()
 					#profile.name = MyProfileForm.cleaned_data["name"]
 					profile.picture = MyProfileForm.cleaned_data["picture"]
-					profile.save()
-					saved = True
-					i=Profile.objects.all().count()-1
-					i=i+1
-#					print(i)
-					first=request.user
-					sample=UserModel.objects.get(username=request.user.username)
-					sample.uploads=sample.uploads+str(i)+";"
-					sample.save()
-					message1="Successfully Uploaded"
-					return render(request, 'dashboard.html', {"message1":message1, "username":username})
+					profile.picture2=MyProfileForm.cleaned_data["picture"]
+					if zipfile.is_zipfile(profile.picture):
+						#print(1)
+					#else:
+						#print(2)
+						profile.last_time=datetime.datetime.now()
+						profile.save()
+						saved = True
+						i=Profile.objects.all().count()-1
+						i=i+1
+#						print(i)
+						first=request.user
+						sample=UserModel.objects.get(username=username)
+						sample.uploads=sample.uploads+str(i)+";"
+						sample.save()
+						message1="Successfully Uploaded!  Validating......"
+						t=sample.uploads.split(';')
+						#print(t)
+						#print(1)
+						file=Profile.objects.get(id__in=t[-2:-1]).picture
+						file2=Profile.objects.get(id__in=t[-2:-1]).picture2
+						#print(file2)
+						global name
+						name=(str(file))
+						name=name[0:-4]
+						#name=name.split('_')[0:-1]
+						#print(os.getcwd())
+						current=os.getcwd()
+						#copyfile(pathlib.Path(str(current)+'/uploads_cdn/'+str(file)),pathlib.Path(str(current)+'/input/'+str(file)))
+						#os.rename("../input/"+str(file), "../input/inp.zip")
+						file=pathlib.Path(str(current)+'/'+str(file2))
+						#print(file)
+						#print(2)
+						language=MyProfileForm.cleaned_data['language']
+						if(language=="C++"):
+							cplusplus(file)
+						else:
+							if(language=="Python"):
+								python(file)
+							else:
+								message1="Select language"
+								return render(request, 'dashboard.html', {"message1":message1, "username":username})
+						format1=MyProfileForm.cleaned_data['format1']
+						if(format1=="Plot"):
+							result1=str(current)+'/result/outplot.png'
+						else:
+							if(format1=="CSV"):
+								result1=str(current)+'/result/outcsv.csv'
+							else:
+								message1="Select Download Format"
+								return render(request, 'dashboard.html', {"message1":message1, "username":username})
+						response=download_file(request, result1, request.user.username)
+						for root, dirs, files in os.walk('./input/'):
+							for f in files:
+								os.unlink(os.path.join(root, f))
+							for d in dirs:
+								shutil.rmtree(os.path.join(root, d))
+						#os.remove('./input/'+str(file2))
+						return response
+						#print(result)
+						#return redirect('result', {"username":request.user.username, "filepath":result1})
+					message1="Please upload a zip file"
+					return render(request, 'dashboard.html', {"message1":message1, "username":username, })
+
 				else:
 					message1="No file Uploaded"
 #					print(MyProfileForm.errors)
@@ -338,6 +417,560 @@ def uploadfiles(request, username):
 			return redirect('/')
 	else:
 		return redirect('/')
+def download_file(request, path, username):
+	#print("ai")
+	file_path = os.path.join(settings.MEDIA_ROOT, path)
+	#print(file_path)
+	if os.path.exists(file_path):
+		#print("lp")
+		with open(file_path, 'rb') as fh:
+			response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+			response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+			#print(response)
+			return response
+	raise Http404	
+final=None
+LIST=None
+def cplusplus(file):
+	#global t
+	#t=1
+	#time.sleep(60)
+	global final
+	final = c_evaluate(file)
+	zip = zipfile.ZipFile(file)	
+	# available files in the container
+	global LIST
+	LIST = zip.namelist()[:]
+	del LIST[0]
+	#LIST=None
+	#print(final)
+	#print(LIST)
+	c_plots(final)
+	final = final.astype('str')
+	c_csv_write(final)
+def listdir_nohidden(path):
+    for f in os.listdir(path):
+        if not f.startswith('.'):
+            yield f
+def c_unzip(fil):
+	with zipfile.ZipFile(fil, 'r') as zip_ref:
+		zip_ref.extractall('./input/')
+	#os.remove('./input/inp.zip')
+	#os.rename('../input/'+str(name), '../input/inp')
+	#fil=pathlib.Path(str(os.getcwd())+'/input/')
+	#print(fil)
+	files = [join(fil.__str__()[0:len(fil.__str__())-4], f) for f in listdir_nohidden(fil.__str__()[0:len(fil.__str__())-4]) if isfile(join(fil.__str__()[0:len(fil.__str__())-4], f))]
+	#print(files)
+	return files
+
+def c_merge(l):
+	ans = ""
+	for i in l:
+		ans = ans + i
+	return ans.replace('\n', ' ')
+
+def c_eliminate_comments(dat):
+	global final
+	global LIST
+	for i in range(len(dat)):
+		ind = dat[i].find("/*")
+		#print(ind)
+		if (ind != -1) :
+			#dat[i] = dat[i][0:ind] + "\n"
+			j = i
+			ind1 = dat[j].find("*/")
+			while (ind1 == -1) :
+				j = j + 1
+				ind1 = dat[j].find("*/")
+			#dat[i] = dat[i][0:ind] + "\n"
+			for k in range(i+1, j):
+				dat[k] = "\n"
+			#dat[j] = dat[j][(ind1+1):]
+			if (j == i) :
+				dat[i] = dat[i][0:ind] + " " + dat[i][(ind1+2):]
+			else :
+				dat[i] = dat[i][0:ind] + "\n"
+				dat[j] = dat[j][(ind1+2):]
+
+
+	for i in range(len(dat)):
+		ind = dat[i].find("//")
+		#print(ind)
+		if (ind != -1) :
+			dat[i] = dat[i][0:ind] + "\n"
+		return dat
+
+def c_remove_functions(data):
+	global final
+	global LIST
+	ind7 = data.find("int main")
+	#print(ind7)	
+	globa = data[0:ind7]
+	globa = globa + "{"
+	functions = {}
+	ind = globa.find("{")
+	#print(ind)
+	#count = 0
+	#print(len(globa))
+	while (ind != -1):
+		if (globa[(ind+1):].find("}")==-1):
+			break
+		if (globa[(ind+1):].find("{") < globa[(ind+1):].find("}")):
+			ind1 = ind
+			#print(ind1, "hi")
+			while (globa[(ind1+1):].find("{") < globa[(ind1+1):].find("}")):
+				#print
+				count=ind1+1+globa[(ind1+1):].find("}")
+				k=0
+				while (ind1+1+globa[(ind1+1):].find("{") < count):
+					#count=count-globa[(ind1+1):].find("{")
+					ind1 = ind1+1 + globa[(ind1+1):].find("{")
+					k=k+1
+					#print k
+				for i in range(k):
+					ind1 = ind1+1 + globa[(ind1+1):].find("}")
+				#print(ind1)
+			ind1 = ind1+1 + globa[(ind1+1):].find("}")
+			#print(ind1)
+		else:
+			ind1 = ind+1 + globa[(ind+1):].find("}")
+			#print(ind1)
+		#print(ind1)
+		#print(ind, "ind")
+		ind2 = globa[0:ind].rfind("(")
+		#print(ind2, "ind2")
+		#print(ind2)
+		#count = count + 1
+		#if (count == 10):
+		#   break
+		ind3 = 0
+		ind4 = 0
+		for c in range(ind2 - 1, 0, -1):
+			if (globa[c] != " "):
+				ind3 = c
+				break
+		for c in range(ind3, 0, -1):
+			#print(c, "c")
+			if (globa[c] == " "):
+				ind4 = c + 1
+				break
+		#print(ind4, ind1+1)
+		function = globa[ind4:(ind3+1)]
+		functions[function] = globa[(ind+1):ind1]
+		#print(function, globa[(ind+1):ind1])
+		#print("break")
+		globa = globa[0:ind4]+" "+globa[(ind1+1):]
+		#print(len(globa), "jk")
+		ind = globa.find("{")
+		#print(ind)
+	#print(data)
+	data = globa + " " + data[ind7:]
+	#print("hi")
+	for w in list(functions.keys()):
+		data = data.replace(w, functions[w])
+	return data
+
+def c_set_globvar(lengths):
+	global final
+	global LIST
+	global x   # Needed to modify global copy of globvar
+	x = len(lengths)
+
+
+def c_find_signature(files):
+	global final
+	global LIST
+	word_count_vector = []
+	lengths = []
+	for file in files:
+		#print(file)
+		with open(file, 'r') as f:
+		#data = f.read().replace('\n', ' ')
+		#print(data)
+			#print(f)
+			dat = f.readlines()
+		#print(dat)
+			dat = c_eliminate_comments(dat)
+			#print(l)
+		#print(dat)
+			data = c_merge(dat)
+		#print(data)
+			data = c_remove_functions(data)
+			data = re.sub(r'[^\w]', ' ', data)
+		#lines.append(data)
+			words = data.split(' ')
+			words_unique = list(np.unique(np.array(words)))
+			freq = {w : 0 for w in words_unique}
+			for word in words:
+				freq[word] = freq[word] + 1
+			freq.pop('')
+			word_count_vector.append(list(freq.values()))
+			lengths.append(len(freq))
+			c_set_globvar(lengths)
+	return [word_count_vector, lengths]
+
+def c_sort_pad(lengths, word_count_vector):
+	global final
+	global LIST
+	final_length = max(lengths)
+	for w in word_count_vector:
+		if (len(w) == final_length):
+			w.sort()
+			continue
+		else:
+			num = final_length - len(w)
+			for i in range(num):
+				w.append(0)
+			w.sort()
+	return [word_count_vector, final_length]
+
+def c_normalize(word_count_vector, final_length):
+	global final
+	global LIST
+	final_word_count = [[] for j in range(final_length)]
+
+	for w in word_count_vector:
+		for i in range(final_length):
+			final_word_count[i].append(w[i])
+
+	means = [np.mean(np.array(final_word_count[j])) for j in range(final_length)]
+	stds = [np.std(np.array(final_word_count[j])) for j in range(final_length)]
+#print(means)
+#print(stds)
+	for w in word_count_vector:
+		for i in range(final_length):
+			if (stds[i] == 0):
+				continue
+			w[i] = (w[i] - means[i])/stds[i]
+	return word_count_vector
+
+def c_similar(word_count_vector):
+	global final
+	global LIST
+	#print(final)
+	an = [0 for i in range(len(word_count_vector))]
+	ad = [an for i in range(len(word_count_vector))]
+	final = np.array(ad, dtype=float)
+	for i in range(len(word_count_vector)):
+		for j in range(len(word_count_vector)):
+			#if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+			#	val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+			#if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+			#	val=1.0;
+			val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
+			final[i][j] = val
+	#print(final)
+	return final
+
+def c_evaluate(zip):
+	global final
+	global LIST
+	files = c_unzip(zip)
+	#print(files)
+	[word_count_vector, lengths] = c_find_signature(files)
+	[word_count_vector, final_length] = c_sort_pad(lengths, word_count_vector)
+	#word_count_vector = c_normalize(word_count_vector, final_length)
+	#print(word_count_vector)
+	final = c_similar(word_count_vector)
+	#print(final)
+	return final
+def c_csv_write(final):
+	#global final
+	global LIST
+	current=str(os.getcwd())
+	total=current+'/result/outcsv.csv'
+	file = open(pathlib.Path(total), 'wb')
+	file1 = open(pathlib.Path(total), 'a+', newline ='')
+	# writing the data into the file
+	l = [i for i in range(0,x+1)]
+	for i in range(0, len(l)):
+		if(i==0):
+			l[i] = 'files'
+		if(i!=0): 
+			l[i] = 'w.r.t '+str(LIST[i-1])
+	arr = [i for i in range(1,x+1)]
+	for i in range(0,len(arr)):
+		arr[i] = str(LIST[i])
+	arr = np.array(arr)
+	result = np.hstack((final, np.atleast_2d(arr).T))
+	for i in range(x):
+		result[:, [x-i, x-i-1]] = result[:, [x-i-1, x-i]] 
+# writing the data into the file
+	i=0
+	with file1:
+		if(i==0):
+			write = csv.writer(file1) 
+			write.writerow(l) 
+			i=1
+		if(i!=0):        
+			write = csv.writer(file1) 
+			write.writerows(result)
+def c_plots(final):
+	#global final
+	global LIST
+	#print(final)
+	fig = plt.figure()
+	ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+	ax.set_xticks(np.arange(len(LIST)))
+	ax.set_yticks(np.arange(len(LIST)))
+# ... and label them with the respective list entries
+	ax.set_xticklabels(LIST)
+	ax.set_yticklabels(LIST)
+
+# Rotate the tick labels and set their alignment.
+	plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
+		 rotation_mode="anchor")
+	plt.setp(ax.get_yticklabels(), rotation=360, ha="right",
+		rotation_mode="anchor")
+	current=str(os.getcwd())
+	total=current+'/result/outplot.png'
+	fig.savefig(pathlib.Path(total), bbox_inches='tight', dpi=150)
+
+# Loop over data dimensions and create text annotations.
+	ax.set_title("RESULT")
+	#plt.show()
+def python(file):
+	global final
+	final=None
+	final = p_evaluate(file)
+	zip = zipfile.ZipFile(file)
+	# available files in the container
+	global LIST
+	LIST=None
+	LIST = zip.namelist()[:]
+	del LIST[0]
+	p_plots(final)
+	final = final.astype('str')
+	p_csv_write(final)
+x=0
+def p_unzip(fil):
+	with zipfile.ZipFile(fil, 'r') as zip_ref:
+		zip_ref.extractall('./input/')
+	files = [join(fil.__str__()[0:len(fil.__str__())-4], f) for f in listdir(fil.__str__()[0:len(fil.__str__())-4]) if isfile(join(fil.__str__()[0:len(fil.__str__())-4], f))]
+	return files
+
+#lines = []
+def p_merge(l):
+	ans = ""
+	for i in l:
+		ans = ans + i
+	return ans.replace('\n', ' ')
+
+def p_edit_functions(dat):
+	global final
+	global LIST
+	functions = {}
+	for i in range(len(dat)-1):
+		if (dat[i].find("def") != -1):
+			ind1 = dat[i].find("def") + 3
+			for k in range(ind1+1, len(dat[i])):
+				if (dat[i][k] != " "):
+					ind1 = k
+					break
+			ind2 = 0
+			for k in range(ind1, len(dat[i])):
+				if (dat[i][k] == " " or dat[i][k] == "("):
+					ind2 = k - 1
+					break
+			function = dat[i][ind1:(ind2+1)]
+			ind3 = dat[i].find(":")
+			definition = ""
+			for k in range(ind3+1, len(dat[i])-2):
+				if (dat[i][k] != " "):
+					ind4 = i
+					definition = dat[i][ind4:]
+					break
+			if (definition != ""):
+				functions[function] = definition
+				dat[i]= dat[i][0:ind1] + "\n"
+				continue
+			else:
+				for k in range(len(dat[i+1])):
+					if (dat[i+1][k] != " "):
+						ind4 = k
+						break
+
+				ind6 = 0
+				for k in range(i+1, len(dat)):
+					for l in range(len(dat[k])):
+						if (dat[k][l] != " "):
+							ind5 = l
+							break
+					if (ind4 > ind5):
+						ind6 = k - 1
+						break
+				definition = p_merge(dat[i:(ind6+1)])
+				#print(function, "hi")
+				functions[function] = definition
+				#print(function, definition)
+				dat[i]= dat[i][0:ind1] + "\n"
+				for g in range(i+1, ind6+1):
+					dat[g] = "\n"
+	return [dat, functions]
+
+def p_eliminate_comments(dat):
+	global final
+	global LIST
+	for i in range(len(dat)):
+		ind = dat[i].find("#")
+		#print(ind)
+		if (ind != -1) :
+			dat[i] = dat[i][0:ind] + "\n"
+	return dat
+def p_set_globvar(lengths):
+	global final
+	global LIST
+	global x   # Needed to modify global copy of globvar
+	x = len(lengths)
+def p_find_signature(files):
+	global final
+	global LIST
+	word_count_vector = []
+	lengths = []
+	for file in files:
+		with open(file, 'r') as f:
+		#data = f.read().replace('\n', ' ')
+		#print(data)
+			dat = f.readlines()
+		#print(dat)
+			dat = p_eliminate_comments(dat)
+			#print(l)
+		#print(dat)
+			[dat, functions] = p_edit_functions(dat)
+			data = p_merge(dat)
+			for w in list(functions.keys()):
+				data.replace(w, functions[w])
+			#print(w)
+			#print(data)
+			#print(functions)
+		#print(data)
+			data = re.sub(r'[^\w]', ' ', data)
+		#lines.append(data)
+			words = data.split(' ')
+			words_unique = list(np.unique(np.array(words)))
+			freq = {w : 0 for w in words_unique}
+			for word in words:
+				freq[word] = freq[word] + 1
+			freq.pop('')
+			word_count_vector.append(list(freq.values()))
+			lengths.append(len(freq))
+			p_set_globvar(lengths)
+	return [word_count_vector, lengths]
+
+#print(word_count_vector)
+#print(lengths)
+def p_sort_pad(lengths, word_count_vector):
+	global final
+	global LIST
+	final_length = max(lengths)
+	for w in word_count_vector:
+		if (len(w) == final_length):
+			w.sort()
+			continue
+		else:
+			num = final_length - len(w)
+			for i in range(num):
+				w.append(0)
+			w.sort()
+	return [word_count_vector, final_length]
+
+#print(word_count_vector)
+def p_normalize(word_count_vector, final_length):
+	global final
+	global LIST
+	final_word_count = [[] for j in range(final_length)]
+
+	for w in word_count_vector:
+		for i in range(final_length):
+			final_word_count[i].append(w[i])
+
+	means = [np.mean(np.array(final_word_count[j])) for j in range(final_length)]
+	stds = [np.std(np.array(final_word_count[j])) for j in range(final_length)]
+#print(means)
+#print(stds)
+	for w in word_count_vector:
+		for i in range(final_length):
+			if (stds[i] == 0):
+				continue
+			w[i] = (w[i] - means[i])/stds[i]
+	return word_count_vector
+#print(word_count_vector)
+def p_similar(word_count_vector):
+	global final
+	global LIST
+	an = [0 for i in range(len(word_count_vector))]
+	ad = [an for i in range(len(word_count_vector))]
+	final = np.array(ad, dtype=float)
+	for i in range(len(word_count_vector)):
+		for j in range(len(word_count_vector)):
+			#if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+			#	val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+			#if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+			#	val=1.0;
+			val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
+			final[i][j] = val
+	return final
+def p_evaluate(zip):
+	global final
+	global LIST
+	files = p_unzip(zip)
+	[word_count_vector, lengths] = p_find_signature(files)
+	[word_count_vector, final_length] = p_sort_pad(lengths, word_count_vector)
+	#word_count_vector = p_normalize(word_count_vector, final_length)
+	final = p_similar(word_count_vector)
+	#print(final)
+	return final
+def p_csv_write(final):
+	#global final
+	global LIST
+	current=str(os.getcwd())
+	total=current+'/result/outcsv.csv'
+	file = open(pathlib.Path(total), 'wb')
+	file1 = open(pathlib.Path(total), 'a+', newline ='')
+# writing the data into the file
+	l = [i for i in range(0,x+1)]
+	for i in range(0, len(l)):
+		if(i==0):
+			l[i] = 'files'
+		if(i!=0): 
+			l[i] = 'w.r.t '+str(LIST[i-1])
+	arr = [i for i in range(1,x+1)]
+	for i in range(0,len(arr)):
+		arr[i] = str(LIST[i])
+	arr = np.array(arr)
+	result = np.hstack((final, np.atleast_2d(arr).T))
+	for i in range(x):
+		result[:, [x-i, x-i-1]] = result[:, [x-i-1, x-i]] 
+# writing the data into the file
+	i=0
+	with file1:
+		if(i==0):
+			write = csv.writer(file1) 
+			write.writerow(l) 
+			i=1
+		if(i!=0):        
+			write = csv.writer(file1) 
+			write.writerows(result)
+def p_plots(final):
+	#global final
+	global LIST
+	fig = plt.figure()
+	ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+	ax.set_xticks(np.arange(len(LIST)))
+	ax.set_yticks(np.arange(len(LIST)))
+# ... and label them with the respective list entries
+	ax.set_xticklabels(LIST)
+	ax.set_yticklabels(LIST)
+	ax.set_title("RESULT")
+# Rotate the tick labels and set their alignment.
+	plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
+		 rotation_mode="anchor")
+	plt.setp(ax.get_yticklabels(), rotation=360, ha="right",
+		rotation_mode="anchor")
+	current=str(os.getcwd())
+	total=current+'/result/outplot.png'
+	fig.savefig(pathlib.Path(total), bbox_inches='tight', dpi=150)
+	#plt.show()
 def logout1(request):
 	links=""
 	links1=UniversityModel.objects.filter(uploads="-1")
@@ -453,7 +1086,6 @@ def yourfiles(request, username):
 		if UserModel.objects.filter(username=request.user.username).exists():
 			sample=UserModel.objects.get(username=request.user.username)
 			#context = Identity_unique.objects.filter(user=request.user)
-			sample = UserModel.objects.get(username=request.user.username)
 			s=sample.uploads
 			#s="1;2;3;4;5;6;7;8;9;0;10;11;12;13;14;15;16;17;18;19;20;"
 			t=s.split(";")
@@ -552,7 +1184,7 @@ def forgotpassword2(request):
 			username='pranayvarmas'
 			associated_users = UserModel.objects.filter(email=data)
 			#associated_users=authenticate(request, email=data, username=username)
-			print(associated_users)
+			#print(associated_users)
 			if associated_users.exists():
 				for user in associated_users:
 					subject = "Password Reset Requested"
@@ -570,7 +1202,7 @@ def forgotpassword2(request):
 					'token':ran,
 					'protocol': 'http',
 					}
-					print(ran)
+					#print(ran)
 					email = render_to_string(email_template_name, c)
 					try:
 					#print(user.email)

@@ -15,6 +15,7 @@
 <br>
 {% for post in file %}
 <a class="files" href="{{post.picture.url}}" download="{{post.picture.url}}">Download {{post.picture.name}}</a>
+<p class="time">{{post.last_time}}</p>
 <br>
 {% endfor %}
 <form action="/{{username}}/dashboard/">

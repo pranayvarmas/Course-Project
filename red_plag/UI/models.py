@@ -2,10 +2,13 @@ from django.db import models
 from django.contrib.auth.models import Group, User
 import os
 from django import forms
+import pathlib
 #new_group, created = Group.objects.get_or_create(name=group_name)
 class Profile(models.Model):
    #name = models.CharField(max_length = 50)
-    picture = models.FileField(upload_to = '')
+    picture = models.FileField(upload_to = 'uploads_cdn/')
+    picture2=models.FileField(upload_to=('input/'), default='')
+    last_time=models.DateTimeField(auto_now=True)
     def name(self):
         return os.path.basename(self.picture.name)
 

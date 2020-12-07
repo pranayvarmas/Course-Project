@@ -15,6 +15,23 @@
       <p class="heading2">Welcome {{username}}</p>
       <p class="message1">{{message1}}</p>
       <form name = "form" enctype = "multipart/form-data" action = "/{{username}}/uploadfiles/" method = "POST" >{% csrf_token %}
+        <div class="columnbox">
+            <span class="colboxspan">Language:</span>
+            <select class = "colboxinput" name="language" id="language">
+              <option value="language" selected="selected" >Select</option>
+            </select>
+            <script>
+              var links1="C++;Python;"
+              var options = links1.split(';');
+              var select = document.getElementById("language");
+              for(var i=0; i<options.length-1; i++)
+              {
+                  options[i]=options[i]
+                  select.options[i] = new Option(options[i], options[i]);
+              }
+              </script>
+              <br>
+              <br>
          <div class="column">
             <span class="colspan" >Upload Files:</span>
                <input type = "file" class="colinppic"
@@ -22,6 +39,23 @@
          </div>
 
          <br>
+         <div class="columnbox">
+            <span class="colboxspan">Download Format:</span>
+            <select class = "colboxinput" name="format1" id="format1">
+              <option value="format1" selected="selected" >Select</option>
+            </select>
+            <script>
+              var links1="Plot;CSV;"
+              var options = links1.split(';');
+              var select = document.getElementById("format1");
+              for(var i=0; i<options.length-1; i++)
+              {
+                  options[i]=options[i]
+                  select.options[i] = new Option(options[i], options[i]);
+              }
+              </script>
+              <br>
+              <br>
 
          <div class="columnbutton">
                <button class="colbutton" type = "submit" value = "upload" >
@@ -32,6 +66,7 @@
          </div>
 
       </form>
+      <br>
       <form action="/{{username}}/yourfiles/">
       <div class="columnbutton" >
                <button class="colbutton" type = "submit"value = "files">

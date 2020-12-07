@@ -27,6 +27,8 @@ class NewUserForm(UserCreationForm):
 class ProfileForm(forms.Form):
     #name = forms.CharField(max_length = 50)
     picture = forms.FileField()
+    language=forms.CharField(max_length=100)
+    format1 = forms.CharField(max_length=100)
 #class UserProfileForm(forms.ModelForm):
  #   def __init__(self, *args, **kwargs):
   #      super(UserProfileForm, self).__init__(*args, **kwargs)  
