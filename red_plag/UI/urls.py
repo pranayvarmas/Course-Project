@@ -31,6 +31,9 @@ urlpatterns = [
 	path('<str:univ>/<str:username>/univfiles/', v.univfiles, name='univfiles'),
 	url(r'^download/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 	path('<str:temp>/', v.temporary, name='connection'),
+	path('<str:temp1>/<str:temp2>/', v.temporary1, name='connection'),
+        path('<str:temp1>/<str:temp2>/<str:temp3>/', v.temporary2, name='connection'),
+        url(r'^.*$', RedirectView.as_view(pattern_name='connection', permanent=False))
 #	url(r'^/(?P<username>[^/]+)/(.*)?', RedirectView.as_view(pattern_name=v.login)),
 #	url(r'^login/$', RedirectView.as_view(pattern_name='login')),
 #	path('connection/', v.login, name='connection'),
