@@ -191,18 +191,19 @@ def similar(word_count_vector):
     final = np.array(ad, dtype=float)
     for i in range(len(word_count_vector)):
         for j in range(len(word_count_vector)):
-            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
-                val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
-            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
-                val=1.0;
-            final[i][j] = val
+            #if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+             #   val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            #if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+             #   val=1.0;
+             val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
+             final[i][j] = val
     return final
 
 def evaluate(zip):
     files = unzip(zip)
     [word_count_vector, lengths] = find_signature(files)
     [word_count_vector, final_length] = sort_pad(lengths, word_count_vector)
-    word_count_vector = normalize(word_count_vector, final_length)
+    #word_count_vector = normalize(word_count_vector, final_length)
     final = similar(word_count_vector)
     print(final)
     return final
