@@ -1,10 +1,13 @@
-import sys
+import sys ,os
 import numpy as np
 import re
 import zipfile
 import csv
+import matplotlib.pyplot as plt
+import seaborn as sns
 from os import listdir
 from os.path import isfile, join
+x = 0
 #files = sys.argv[1:]
 #lines = []
 #word_count_vector = []
@@ -118,6 +121,11 @@ def remove_functions(data):
         data = data.replace(w, functions[w])
     return data
 
+def set_globvar(lengths):
+    global x   # Needed to modify global copy of globvar
+    x = len(lengths)
+
+
 def find_signature(files):
     word_count_vector = []
     lengths = []
@@ -143,6 +151,7 @@ def find_signature(files):
             freq.pop('')
             word_count_vector.append(list(freq.values()))
             lengths.append(len(freq))
+            set_globvar(lengths)
     return [word_count_vector, lengths]
 
 def sort_pad(lengths, word_count_vector):
@@ -182,7 +191,10 @@ def similar(word_count_vector):
     final = np.array(ad, dtype=float)
     for i in range(len(word_count_vector)):
         for j in range(len(word_count_vector)):
-            val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+                val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+                val=1.0;
             final[i][j] = val
     return final
 
@@ -194,16 +206,58 @@ def evaluate(zip):
     final = similar(word_count_vector)
     print(final)
     return final
-
 final = evaluate(sys.argv[1])
+zip = zipfile.ZipFile(sys.argv[1])
+# available files in the container
+LIST = zip.namelist()[:]
+del LIST[0]
 def csv_write(final):
-    file = open('comparision.csv', 'wb')
-    file1 = open('comparision.csv', 'a+', newline ='')
-
+    file = open('REDPLAG.csv', 'wb')
+    file1 = open('REDPLAG.csv', 'a+', newline ='')
 # writing the data into the file
+    l = [i for i in range(0,x+1)]
+    for i in range(0, len(l)):
+        if(i==0):
+            l[i] = 'files'
+        if(i!=0): 
+            l[i] = 'w.r.t '+str(LIST[i-1])
+    arr = [i for i in range(1,x+1)]
+    for i in range(0,len(arr)):
+        arr[i] = str(LIST[i])
+    arr = np.array(arr)
+    result = np.hstack((final, np.atleast_2d(arr).T))
+    for i in range(x):
+        result[:, [x-i, x-i-1]] = result[:, [x-i-1, x-i]] 
+# writing the data into the file
+    i=0
     with file1:
-        write = csv.writer(file1)
-        write.writerows(final)
+        if(i==0):
+            write = csv.writer(file1) 
+            write.writerow(l) 
+            i=1
+        if(i!=0):        
+            write = csv.writer(file1) 
+            write.writerows(result)
+def plots(final):
+    fig = plt.figure()
+    ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+    ax.set_xticks(np.arange(len(LIST)))
+    ax.set_yticks(np.arange(len(LIST)))
+# ... and label them with the respective list entries
+    ax.set_xticklabels(LIST)
+    ax.set_yticklabels(LIST)
 
+# Rotate the tick labels and set their alignment.
+    plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
+         rotation_mode="anchor")
+    plt.setp(ax.get_yticklabels(), rotation=360, ha="right",
+        rotation_mode="anchor")
+    fig.savefig('REDPLAG.png', bbox_inches='tight', dpi=150)
+
+# Loop over data dimensions and create text annotations.
+    ax.set_title("RESULT")
+    plt.show()
+plots(final)
+final = final.astype('str')
 csv_write(final)
 
