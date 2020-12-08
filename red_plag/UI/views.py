@@ -1088,9 +1088,9 @@ def yourfiles(request, username):
 def univfiles(request, univ, username):
 	
 	if request.user.is_authenticated:
-		if UniversityModel.objects.filter(username=request.user.username).exists():
-			samplei=UniversityModel.objects.get(username=request.user.username)
-			if samplei.uploads=="-1" and samplei.university==univ:
+		if UniversityModel.objects.filter(username=univ).exists():
+			samplei=UniversityModel.objects.get(username=univ)
+			if samplei.uploads=="-1" and samplei.username==request.user.username:
 				if UserModel.objects.filter(username=username).exists():
 					sample=UserModel.objects.get(username=username)
 					if UniversityModel.objects.filter(username=univ).exists():
@@ -1109,13 +1109,17 @@ def univfiles(request, univ, username):
 							message1="You don't have access to this user files"
 							return render(request, 'univdashboard.html', {"message1":message1})
 					else:
+						print(1)
 						return redirect('/')
 				else:
+					print(2)
 					#message1="Invalid"
 					return redirect('/')
 			else:
+				print(3)
 				return redirect('/')
 		else:
+			print(4)
 			return redirect('/')
 
 	else:
