@@ -208,10 +208,10 @@ def evaluate(zip):
     print(final)
     return final
 final = evaluate(sys.argv[1])
-zip = zipfile.ZipFile(sys.argv[1])
-# available files in the container
-LIST = zip.namelist()[:]
-del LIST[0]
+y = str(sys.argv[1])
+z = len(y)-4
+LIST = os.listdir(y[:z])
+print(LIST)
 def csv_write(final):
     file = open('REDPLAG.csv', 'wb')
     file1 = open('REDPLAG.csv', 'a+', newline ='')
