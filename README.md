@@ -4,4 +4,4 @@ We have implemented a user interface for plagiarism check where the client can l
 
 All these have been done using Django for both the front and the back end, a python web framework.
 
-We implemented a python script for plagiarism check that compares multiple files and produces an output CSV file, or a PLOT image (can be chosen by the user in User Interface) integrated into the Django framework. Also implemented a language-specific functionality with C++ and Python included.
+We implemented a python script for plagiarism check that compares multiple files and produces an output CSV file, or a PLOT image (can be chosen by the user in User Interface) integrated into the Django framework.On pressing the check button will download directly the PLOT image or CSV file produced. Also implemented a language-specific functionality with C++ and Python included.
