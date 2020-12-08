@@ -436,7 +436,8 @@ def cplusplus(file):
 	global final
 	global LIST
 	final = c_evaluate(file)
-	LIST=os.listdir(str((str(file)[:(len(str(file)))-4])))
+	#LIST=os.listdir(str((str(file)[:(len(str(file)))-4])))
+	LIST=list(listdir_nohidden(str((str(file)[:(len(str(file)))-4]))))
 	#LIST = [join(file.__str__()[0:len(file.__str__())-4], f) for f in listdir_nohidden(file.__str__()[0:len(file.__str__())-4]) if isfile(join(file.__str__()[0:len(file.__str__())-4], f))]
 	final = final.astype('int')
 	c_plots(final)
@@ -721,7 +722,8 @@ def python(file):
 	global LIST
 	final = p_evaluate(file)
 	#LIST = [join(file.__str__()[0:len(file.__str__())-4], f) for f in listdir_nohidden(file.__str__()[0:len(file.__str__())-4]) if isfile(join(file.__str__()[0:len(file.__str__())-4], f))]
-	LIST=os.listdir(str((str(file)[:(len(str(file)))-4])))
+	#LIST=os.listdir(str((str(file)[:(len(str(file)))-4])))
+	LIST=list(listdir_nohidden(str((str(file)[:(len(str(file)))-4]))))
 	final = final.astype('int')
 	p_plots(final)
 	p_csv_write(final)
