@@ -15,7 +15,8 @@ eliminate_comments:-
 2)We first delete the paragraph comments (starting with "/*" and ending with "*/"). For this, we iterate through every line to find a "/*" and then we check 
 through every line starting from this line for "*/" and after we find a pair of "/*" and "*/", we delete everything in between them including these endpoints.
 And whereever necessary, we add a "\n" at the end of each string of the list if it was deleted by the before process to maintain the structure of the code.
-3)Now, we delete the line comments (starting with a "//"), we iterate through the updated list and if we find "//", then we delete everything that comes after it and add a "\n". After this, the updated list is returned.
+3)Now, we delete the line comments (starting with a "//"), we iterate through the updated list and if we find "//", then we delete everything that comes after it
+and add a "\n". After this, the updated list is returned.
 
 remove_functions:-
 1)This takes a string as input (this string is assumed to devoid of comments and that this is the merged string of the lines in the file)
@@ -46,11 +47,11 @@ distribution of words and their counts which is uniform over all files (increasi
 
 similar:-
 1)This takes a list of lists as input which is assumed to be the the word count vectors.
-2)For every pair of vectors, we calculate the norm of the difference of those vectors and divide by the maximum norm of the vectors. This will always be less than
-1 because, as the vectors are assumed to sorted, any two vectors will have an acute angle in between them (because all of them will be on the same side of the
-hyperplane x1=x2=...=xn for an n-dimensional space of vectors) and the maximum value of the difference is the maximum norm at best (equality when a vector
-consists of all zeros). Now, this can be used as an estimate for similarity because similar files will be "closer" to each other. For the percentage simialrity,
-we subtract this value from 1 and multiply by 100.
+2)For every pair of vectors, we calculate the norm of the difference of those vectors and divide by the maximum norm of the vectors. This will always 
+be less than 1 because, as the vectors are assumed to sorted, any two vectors will have an acute angle in between them (because all of them will be on the same
+side of the hyperplane x1=x2=...=xn for an n-dimensional space of vectors) and the maximum value of the difference is the maximum norm at best (equality when a
+vector consists of all zeros). Now, this can be used as an estimate for similarity because similar files will be "closer" to each other. For the percentage
+simialrity, we subtract this value from 1 and multiply by 100.
 3)We create a symmetric matrix consisting of all these values and return this.
 
 evaluate:-
@@ -63,8 +64,8 @@ python.py:-
 edit_functions:-
 1)This takes a list of strings as input which is assumed to be lines in a python file.
 2)We first find the occurence of "def" in in each line, if present, we calculate the index of the first character in the next line, which indicates the
-indentation level of each line in the function which is important for python language and based on thius level, collects the function definition and stores it and
-deletes it in the input list. And, returns this modified input and the dictionary of functions.
+indentation level of each line in the function which is important for python language and based on thius level, collects the function definition and stores it
+and deletes it in the input list. And, returns this modified input and the dictionary of functions.
 
 
 
