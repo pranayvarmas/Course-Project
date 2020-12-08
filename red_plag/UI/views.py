@@ -1123,8 +1123,7 @@ def univfiles(request, univ, username):
 			return redirect('/')
 
 	else:
-		message1="Please login to download the files"
-		return render(request,'login.html', {"message1":message1})
+		return redirect('/')
 def download(request, path):
 	links=""
 	links1=UniversityModel.objects.filter(uploads="-1")
