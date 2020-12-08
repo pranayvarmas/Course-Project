@@ -12,19 +12,19 @@
       <form name = "form" action = "/{{username}}/savepasscode/"method = "post" >{% csrf_token %}
          <div class="column">
             <span class="colspan" >Old Passcode:</span>
-               <input type = "password" class="colinput"
+               <input type = "integer" class="colinput"
                   placeholder = "old passcode" name = "passcode0" />
          </div>
          <br>
          <div class="column">
             <span class="colspan" >New Passcode:</span>
-               <input type = "password" class="colinput" 
+               <input type = "integer" class="colinput" 
                   placeholder = "new passcode" name = "passcode1" />
          </div>
          <br>
          <div class="column">
             <span class="colspan" >Passcode(again):</span>
-               <input type = "password" class="colinput"
+               <input type = "integer" class="colinput"
                   placeholder = "new passcode (again)" name = "passcode2" />
          </div>
          <br>
