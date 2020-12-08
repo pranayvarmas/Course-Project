@@ -186,9 +186,9 @@ def evaluate(zip):
     [word_count_vector, final_length] = sort_pad(lengths, word_count_vector)
     #word_count_vector = normalize(word_count_vector, final_length)
     final = similar(word_count_vector)
-    #print(final)
+    print(final)
     return final
-[final,LIST] = evaluate(sys.argv[1])
+final = evaluate(sys.argv[1])
 LIST=os.listdir(str((sys.argv[1][:(len(sys.argv[1]))-4])))
 def csv_write(final):
     file = open('REDPLAG.csv', 'wb')
