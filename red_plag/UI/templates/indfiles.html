@@ -11,7 +11,9 @@
 <p class="heading"><b>Uploaded Files</b></p>
 <div class="message1">{{message1}}</div>
 {% for post in file %}
-<a class="files" href="{{post.picture.url}}" download="{{post.picture.url}}">Download {{post.picture.name}}</a>
+
+<a class="files" href="{{post.picture.url}}" download="{{post.picture.url}}">Download {{post.name}}</a>
+<p class="time">{{post.last_time}}</p>
 {% endfor %}
 <form action="/{{username}}/univdashboard/">
       <div class="columnbutton">
