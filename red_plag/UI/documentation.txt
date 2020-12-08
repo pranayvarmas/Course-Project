@@ -1,0 +1,54 @@
+cplusplus.py:-
+
+unzip:-
+This takes a zip file as a single input.
+Here, we use the ZipFile function of the zipfile module and extract all the files to a directory which has the same name as the zip file. Now, we use the os module and it's functions listdir, isfile and join to generate a list of the files which are present in the created directory and returns this list.
+
+merge:-
+This takes a list of strings as input.
+Here, we just concatenate all the elements of the list while seperating them by a space. And then, replaces the string "\n" with a spce everywhere and returns this new string.
+
+eliminate_comments:-
+This takes a list of strings which are assumed to lines in a C++ file.
+We first delete the paragraph comments (starting with "/*" and ending with "*/"). For this, we iterate through every line to find a "/*" and then we check through every line starting from this line for "*/" and after we find a pair of "/*" and "*/", we delete everything in between them including these endpoints. And whereever necessary, we add a "\n" at the end of each string of the list if it was deleted by the before process to maintain the structure of the code.
+Now, we delete the line comments (starting with a "//"), we iterate through the updated list and if we find "//", then we delete everything that comes after it and add a "\n".
+After this, the updated list is returned.
+
+remove_functions:-
+This takes a string as input (this string is assumed to devoid of comments and that this is the merged string of the lines in the file)
+We first seperate the global part and the part in "int main" because all the function definitons would be in the global part of the code and the function calls would be inside the "main". In the global part, we check for the first occurence of "{", this must correspond to a function, then we try to find the closing "}" using an inner while which takes of all the flower brackets that may be present inside the function because of for or while or if statements. Using these limits, we find the function name and isolate the function definition, store this in a dictionary and then delete this definition along with all the brackets and repeat the process until no function definition is left.
+After all the functions and their definitions are collected, we update the global part of the original string and replace all the function calls with their definitions and return this string.
+
+set_globvar:-
+This takes a list as input and create a global variable whose value is the length of the string
+
+find_signature:-
+This takes a list of files as input.
+For every file, we create a list of lines in the file. Then we remove the comments using the "eliminate_comments" function for better results. Then, we use the "remove_functions" to replace all the function calls with their definitions and deletes their definitons in the global part. This part is necessary to roughly tackle the situation where one user may write explicit code and the other user may use function calls. Now, after this, we create a vector of word counts for all of these files and store them. We also store the lengths of all these vectors. Now, we return the list of word counts and the lengths in the form of another list.
+
+sort_pad:-
+This takes two lists as inputs, the first one is assumed to be the lengths of word count vectors and the other is the word count vector itself.
+We first find the the maximum length using the lengths list and increase the length of each word count vector to it by padding zeros. (we can pad zeros because it just implies that a word foreign to a file is not there in the file, which is true and doesn't disturb our estimations). Then we sort these vectors to get a distribution of words and their counts which is uniform over all files (increasing or decreasing).
+We return this maximum length and the updated word count vectors in the form of another list.
+
+similar:-
+This takes a list of lists as input which is assumed to be the the word count vectors.
+For every pair of vectors, we calculate the norm of the difference of those vectors and divide by the maximum norm of the vectors. This will always be less than 1 because, as the vectors are assumed to sorted, any two vectors will have an acute angle in between them (because all of them will be on the same side of the hyperplane x1=x2=...=xn for an n-dimensional space of vectors) and the maximum value of the difference is the maximum norm at best (equality when a vector consists of all zeros). Now, this can be used as an estimate for similarity because similar files will be "closer" to each other. For the percentage simialrity, we subtract this value from 1 and multiply by 100.
+We create a symmetric matrix consisting of all these values and return this.
+
+evaluate:-
+This takes a zip file as input.
+This function first unzips the zip file using the "unzip" function, finds the word counts using the "find_signature", pad and sort them by the "sort_pad" function, and finally calculates the estimates using the "similar" function.
+
+python.py:-
+
+edit_functions:-
+This takes a list of strings as input which is assumed to be lines in a python file.
+We first find the occurence of "def" in in each line, if present, we calculate the index of the first character in the next line, which indicates the indentation level of each line in the function which is important for python language and based on thius level, collects the function definition and stores it and deletes it in the input list. And, returns this modified input and the dictionary of functions.
+
+
+
+
+
+
+
