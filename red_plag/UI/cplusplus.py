@@ -8,6 +8,7 @@ import seaborn as sns
 from os import listdir
 from os.path import isfile, join
 x = 0
+y = os.listdir(os.getcwd())
 #files = sys.argv[1:]
 #lines = []
 #word_count_vector = []
@@ -208,9 +209,9 @@ def evaluate(zip):
     print(final)
     return final
 final = evaluate(sys.argv[1])
-y = str(sys.argv[1])
-z = len(y)-4
-LIST = os.listdir(y[:z])
+a=os.listdir(os.getcwd())
+z=list(set(a) - set(y))
+LIST = os.listdir(str(z[0]))
 print(LIST)
 def csv_write(final):
     file = open('REDPLAG.csv', 'wb')
