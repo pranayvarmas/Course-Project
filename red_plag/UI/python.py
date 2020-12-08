@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from os import listdir
 from os.path import isfile, join
-global z
-z=[]
 def unzip(fil):
     with zipfile.ZipFile(fil, 'r') as zip_ref:
         zip_ref.extractall('.')
@@ -161,8 +159,6 @@ def similar(word_count_vector):
              #   val=1.0;
             val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
             final[i][j] = val*100
-            if(final[i][j]>100):
-                final[i][j]=100
     return final
 def evaluate(zip):
     files = unzip(zip)
@@ -170,10 +166,10 @@ def evaluate(zip):
     [word_count_vector, final_length] = sort_pad(lengths, word_count_vector)
     #word_count_vector = normalize(word_count_vector, final_length)
     final = similar(word_count_vector)
-    #print(final)
+    print(final)
     return final
 #print(np.dot(np.array(word_count_vector[0]), np.array(word_count_vector[0])) / (np.linalg.norm(np.array(word_count_vector[0]))*np.linalg.norm(np.array(word_count_vector[0]))))
-[final,LIST] = evaluate(sys.argv[1])
+final = evaluate(sys.argv[1])
 LIST=os.listdir(str((sys.argv[1][:(len(sys.argv[1]))-4])))
 def csv_write(final):
     file = open('REDPLAG.csv', 'wb')
