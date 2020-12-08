@@ -4,19 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <title> Red Plag </title>
-    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}all.css" />
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}static/all.css" />
 
 </head>
 <body>
 <a class="logo" href="/"><b>Red Plag</b></a>
 <a class="logoside" href="/">Team 779499120</a>
-<br>
-<br>
 <hr class="hr1">
-<p class="heading">Login Page</p>
+<p class="heading"><b>Login Page</b></p>
       <div class="message1">{{message1}}</div>
       <br>
-
       <form name = "form" action = "/" method = "post"  >{% csrf_token %}
          
          <div class="column">
@@ -58,7 +55,6 @@
                <input type = "integer" class="colinput" placeholder = "passcode" name = "passcode" />
               </label>
          </div>
-         <br>
          
          <div class="columnbutton">
             
@@ -70,17 +66,6 @@
          </div>
          
       </form>
-      <br>
-      <form name = "forgot" action = "/forgotpassword1/" method = "post" >{% csrf_token %}
-         <div class="columnbutton">
-               <button class="colbutton" type = "submit" value = "forgot" >
-                  <div class="colbuttext">
-                  <strong>Forgot Password</strong>
-              </div>
-               </button>
-         </div>
-      </form>
-      <br>
       <form name = "signup" action = "/signup/" method = "post" >{% csrf_token %}
          <div class="columnbutton">
                <button class="colbutton" type = "submit" value = "Signup" >
@@ -90,12 +75,20 @@
                </button>
          </div>
       </form>
-      <br>
       <form name = "univsignup" action = "/univsignup/" method = "post" >{% csrf_token %}
          <div class="columnbutton">
                <button class="colbutton" type = "submit" value = "univlogin" >
                   <div class="colbuttext">
                   <strong>University Signup</strong>
+              </div>
+               </button>
+         </div>
+      </form>
+      <form name = "aboutus" action = "/aboutus/" method = "post" >{% csrf_token %}
+         <div class="columnbutton">
+               <button class="colbutton" type = "submit" value = "aboutus" >
+                  <div class="colbuttext">
+                  <strong>About us</strong>
               </div>
                </button>
          </div>

@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from os import listdir
 from os.path import isfile, join
-x = 0
-y = os.listdir(os.getcwd())
 #files = sys.argv[1:]
 #lines = []
 #word_count_vector = []
@@ -168,24 +166,6 @@ def sort_pad(lengths, word_count_vector):
             w.sort()
     return [word_count_vector, final_length]
 
-def normalize(word_count_vector, final_length):
-    final_word_count = [[] for j in range(final_length)]
-
-    for w in word_count_vector:
-        for i in range(final_length):
-            final_word_count[i].append(w[i])
-
-    means = [np.mean(np.array(final_word_count[j])) for j in range(final_length)]
-    stds = [np.std(np.array(final_word_count[j])) for j in range(final_length)]
-#print(means)
-#print(stds)
-    for w in word_count_vector:
-        for i in range(final_length):
-            if (stds[i] == 0):
-                continue
-            w[i] = (w[i] - means[i])/stds[i]
-    return word_count_vector
-
 def similar(word_count_vector):
     an = [0 for i in range(len(word_count_vector))]
     ad = [an for i in range(len(word_count_vector))]
@@ -197,7 +177,7 @@ def similar(word_count_vector):
             #if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
              #   val=1.0;
              val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
-             final[i][j] = val
+             final[i][j] = val*100
     return final
 
 def evaluate(zip):
@@ -206,13 +186,10 @@ def evaluate(zip):
     [word_count_vector, final_length] = sort_pad(lengths, word_count_vector)
     #word_count_vector = normalize(word_count_vector, final_length)
     final = similar(word_count_vector)
-    print(final)
+    #print(final)
     return final
-final = evaluate(sys.argv[1])
-a=os.listdir(os.getcwd())
-z=list(set(a) - set(y))
-LIST = os.listdir(str(z[0]))
-print(LIST)
+[final,LIST] = evaluate(sys.argv[1])
+LIST=os.listdir(str((sys.argv[1][:(len(sys.argv[1]))-4])))
 def csv_write(final):
     file = open('REDPLAG.csv', 'wb')
     file1 = open('REDPLAG.csv', 'a+', newline ='')
@@ -242,13 +219,13 @@ def csv_write(final):
             write.writerows(result)
 def plots(final):
     fig = plt.figure()
-    ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+    ax = sns.heatmap(final, linewidth=0.5,cmap="hot",vmin =0,vmax =100,annot =True,fmt='g')
     ax.set_xticks(np.arange(len(LIST)))
     ax.set_yticks(np.arange(len(LIST)))
 # ... and label them with the respective list entries
     ax.set_xticklabels(LIST)
     ax.set_yticklabels(LIST)
-
+    ax.set_title("RESULT")
 # Rotate the tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
          rotation_mode="anchor")
@@ -257,8 +234,7 @@ def plots(final):
     fig.savefig('REDPLAG.png', bbox_inches='tight', dpi=150)
 
 # Loop over data dimensions and create text annotations.
-    ax.set_title("RESULT")
     plt.show()
+final = final.astype('int')
 plots(final)
-final = final.astype('str')
 csv_write(final)

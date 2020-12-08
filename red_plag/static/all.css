@@ -1,0 +1,29 @@
+
+a.logo:link,a.logo:visited,a.logo:hover, a.logo:active {color:rgba(0,153,255,1);text-decoration:none;font-size:3em;font-family:"Calibri";padding-left:.7em;}
+a.logoside:link,a.logoside:visited,a.logoside:hover, a.logoside:active {color:rgba(0,153,255,1);text-decoration:none;font-size:3em;font-family:"Calibri";float:right;padding-top:.1em;padding-right:1em;}
+a.demo:link, a.demo:visited,a.demo:active{color:white;text-decoration:none;font-size:1.5em;text-align:center;font-family:"Calibri";}
+body{background-color:rgba(0,0,0,1);}
+a.demo:hover{color:blue;text-decoration:none;font-size:1.5em;text-align:center;font-family:"Calibri";}
+p.heading{color:rgba(204,0,0,1);text-align:center;font-size:45px;}
+p.heading2 {color:white; text-align:center; font-size:1.5em}
+div.message1 {color:red;font-size:1.3em; text-align:center;}
+p.message1 {color:red;font-size:1.3em; text-align:center;}
+div.message2 {color:red;font-size:1.2em;}
+p.message2 {color:red;font-size:1.2em;}
+div.column {max-width:470px;text-align:center;margin-left:32%;}
+span.colspan {color:white;font-size:1.2em;font-family:'Arial';}
+input.colinput {margin-left:20%; padding: 5px 15px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);size:'50';}
+input.colinppic {margin-left:20%; margin: 8px 0;box-sizing: border-box;border:2px; border-style:solid; border-color:rgba(255,255,255,.4);font-size:1em;background-color:white;padding:4px;}
+div.collist {margin-left:20%;padding: 12px 60px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);}
+div.columnbutton {max-width:470px;text-align:center;margin-left:32%;}
+button.colbutton {border:0px; background-color:#4285F4; margin-top:8%;text-align:center;margin-left:35%;text-decoration: none;display: inline-block;  border: none;cursor:pointer;height:30px; width:40%;margin-left:19%;}
+div.colbuttext {color:black; font-size:1.2em;}
+div.columnbox {margin-left:31%;text-align:center;max-width:470px; }
+span.colboxspan {color:white; font-size:1.2em;font-family:'Arial';}
+select.colboxinput {margin-left:20%;padding: 5px 40px;margin: 8px 0;box-sizing: border-box;border:1.6px; border-style:solid; border-color:rgba(255,255,255,.4);}
+hr.hr1 {color:white;}
+a.files:link, a.files:visited, a.files:active{color:rgba(255,255,255,1);text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;}
+a.files:hover{color:rgba(0,0,255,1);text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;}
+p.time{color:rgba(0,153,255,1);text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;}
+p.details{color:rgba(0,153,255,1);font-size:1.7em; text-align:center;}
+p.instructions{color:white;font-size:1.3em;text-align:center;}

@@ -13,6 +13,7 @@ urlpatterns = [
 	path('forgotpassword2/', v.forgotpassword2, name='forgotpassword2'),
 	path('resetpassword/', v.resetpassword, name='resetpassword'),
 	path('univsignup/', v.univsignup, name='univsignup'),
+	path('aboutus/', v.aboutus, name='aboutus'),
 	path('<str:username>/dashboard/',v.dashboard,name='dashboard'),
 	path('<str:username>/univdashboard/',v.univdashboard,name='univdashboard'),
 	path('signup/', v.signup, name='signup'),
@@ -31,7 +32,6 @@ urlpatterns = [
 	path('<str:univ>/<str:username>/univfiles/', v.univfiles, name='univfiles'),
 	url(r'^download/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 	path('<str:temp>/', v.temporary, name='connection'),
-	url(r'^.*$', RedirectView.as_view(pattern_name='connection', permanent=False))
 #	url(r'^/(?P<username>[^/]+)/(.*)?', RedirectView.as_view(pattern_name=v.login)),
 #	url(r'^login/$', RedirectView.as_view(pattern_name='login')),
 #	path('connection/', v.login, name='connection'),

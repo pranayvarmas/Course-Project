@@ -339,7 +339,7 @@ def uploadfiles(request, username):
 				if MyProfileForm.is_valid():
 					#print(1)
 					profile = Profile()
-					#profile.name = MyProfileForm.cleaned_data["name"]
+					profile.name = MyProfileForm.cleaned_data["picture"].name
 					profile.picture = MyProfileForm.cleaned_data["picture"]
 					profile.picture2=MyProfileForm.cleaned_data["picture"]
 					if zipfile.is_zipfile(profile.picture):
@@ -431,27 +431,20 @@ def download_file(request, path, username):
 	raise Http404	
 final=None
 LIST=None
+z=None
 def cplusplus(file):
-	#global t
-	#t=1
-	#time.sleep(60)
 	global final
-	final = c_evaluate(file)
-	zip = zipfile.ZipFile(file)	
-	# available files in the container
 	global LIST
-	LIST = zip.namelist()[:]
-	del LIST[0]
-	#LIST=None
-	#print(final)
-	#print(LIST)
+	final = c_evaluate(file)
+	LIST=os.listdir(str((str(file)[:(len(str(file)))-4])))
+	#LIST = [join(file.__str__()[0:len(file.__str__())-4], f) for f in listdir_nohidden(file.__str__()[0:len(file.__str__())-4]) if isfile(join(file.__str__()[0:len(file.__str__())-4], f))]
+	final = final.astype('int')
 	c_plots(final)
-	final = final.astype('str')
 	c_csv_write(final)
 def listdir_nohidden(path):
-    for f in os.listdir(path):
-        if not f.startswith('.'):
-            yield f
+	for f in os.listdir(path):
+		if not f.startswith('.'):
+			yield f
 def c_unzip(fil):
 	with zipfile.ZipFile(fil, 'r') as zip_ref:
 		zip_ref.extractall('./input/')
@@ -658,19 +651,18 @@ def c_similar(word_count_vector):
 			#if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
 			#	val=1.0;
 			val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
-			final[i][j] = val
+			final[i][j] = val*100
 	#print(final)
 	return final
 
 def c_evaluate(zip):
 	global final
 	global LIST
+	global z
 	files = c_unzip(zip)
-	#print(files)
 	[word_count_vector, lengths] = c_find_signature(files)
 	[word_count_vector, final_length] = c_sort_pad(lengths, word_count_vector)
-	#word_count_vector = c_normalize(word_count_vector, final_length)
-	#print(word_count_vector)
+	#word_count_vector = normalize(word_count_vector, final_length)
 	final = c_similar(word_count_vector)
 	#print(final)
 	return final
@@ -708,15 +700,14 @@ def c_csv_write(final):
 def c_plots(final):
 	#global final
 	global LIST
-	#print(final)
 	fig = plt.figure()
-	ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+	ax = sns.heatmap(final, linewidth=0.5,cmap="hot",vmin =0,vmax =100,annot =True,fmt='g')
 	ax.set_xticks(np.arange(len(LIST)))
 	ax.set_yticks(np.arange(len(LIST)))
 # ... and label them with the respective list entries
 	ax.set_xticklabels(LIST)
 	ax.set_yticklabels(LIST)
-
+	ax.set_title("RESULT")
 # Rotate the tick labels and set their alignment.
 	plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
 		 rotation_mode="anchor")
@@ -725,22 +716,14 @@ def c_plots(final):
 	current=str(os.getcwd())
 	total=current+'/result/outplot.png'
 	fig.savefig(pathlib.Path(total), bbox_inches='tight', dpi=150)
-
-# Loop over data dimensions and create text annotations.
-	ax.set_title("RESULT")
-	#plt.show()
 def python(file):
 	global final
-	final=None
-	final = p_evaluate(file)
-	zip = zipfile.ZipFile(file)
-	# available files in the container
 	global LIST
-	LIST=None
-	LIST = zip.namelist()[:]
-	del LIST[0]
+	final = p_evaluate(file)
+	#LIST = [join(file.__str__()[0:len(file.__str__())-4], f) for f in listdir_nohidden(file.__str__()[0:len(file.__str__())-4]) if isfile(join(file.__str__()[0:len(file.__str__())-4], f))]
+	LIST=os.listdir(str((str(file)[:(len(str(file)))-4])))
+	final = final.astype('int')
 	p_plots(final)
-	final = final.astype('str')
 	p_csv_write(final)
 x=0
 def p_unzip(fil):
@@ -908,15 +891,16 @@ def p_similar(word_count_vector):
 			#if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
 			#	val=1.0;
 			val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
-			final[i][j] = val
+			final[i][j] = val*100
 	return final
 def p_evaluate(zip):
 	global final
 	global LIST
+	global z
 	files = p_unzip(zip)
 	[word_count_vector, lengths] = p_find_signature(files)
 	[word_count_vector, final_length] = p_sort_pad(lengths, word_count_vector)
-	#word_count_vector = p_normalize(word_count_vector, final_length)
+	#word_count_vector = normalize(word_count_vector, final_length)
 	final = p_similar(word_count_vector)
 	#print(final)
 	return final
@@ -955,7 +939,7 @@ def p_plots(final):
 	#global final
 	global LIST
 	fig = plt.figure()
-	ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+	ax = sns.heatmap(final, linewidth=0.5,cmap="hot",vmin =0,vmax =100,annot =True,fmt='g')
 	ax.set_xticks(np.arange(len(LIST)))
 	ax.set_yticks(np.arange(len(LIST)))
 # ... and label them with the respective list entries
@@ -970,7 +954,6 @@ def p_plots(final):
 	current=str(os.getcwd())
 	total=current+'/result/outplot.png'
 	fig.savefig(pathlib.Path(total), bbox_inches='tight', dpi=150)
-	#plt.show()
 def logout1(request):
 	links=""
 	links1=UniversityModel.objects.filter(uploads="-1")
@@ -1279,6 +1262,8 @@ def savepasscode(request, username):
 			return redirect('/')
 	else:
 		return redirect('/')
+def aboutus(request):
+	return render(request, 'aboutus.html')
 #def orga(request):
 #	if request.user.is_authenticated:
 #		username=request.user.username

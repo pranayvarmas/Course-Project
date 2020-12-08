@@ -2,22 +2,22 @@
 <head>
 <meta charset="UTF-8">
     <title> Red Plag </title>
-    <link rel="stylesheet" href="all.css">
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}static/all.css" />
 </head>
 <body style="align:center;">
 <a class="logo" href="/"><b>Red Plag</b></a>
 <a class="logoside" href="/">Team 779499120</a>
-<br>
-<br>
 <hr class="hr1">
-<p class="heading">Logged in as {{username}}</p>
-      <br>
+<p class="heading"><b>Logged in as {{username}}</b></p>
       <p class="message1">{{message2}}</p>
       <p class="heading2">Welcome {{username}}</p>
       <p class="message1">{{message1}}</p>
+      <br>
       <p class="details">{{details}}</p>
-      <p>Usernames of users logged in with your university name is shown above</p>
-      <p>You can access uploaded files of individual users by going to "/{{username}}/username/univfiles/"</p>
+      <br>
+      <p class="instructions">Instructions:</p>
+      <p class="instructions">Usernames of users logged in with your university name is shown above</p>
+      <p class="instructions">You can access uploaded files of individual users by going to "/{{username}}/username/univfiles/"</p>
       <form action="/{{username}}/changepasscode/">
       <div class="columnbutton" >
                <button class="colbutton" type = "submit"value = "changepasscode" >

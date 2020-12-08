@@ -2,21 +2,24 @@
 <head>
 <meta charset="UTF-8">
     <title> Red Plag </title>
-    <link rel="stylesheet" href="all.css">
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}static/all.css" />
 </head>
 <body style="align:center;">
 <a class="logo" href="/"><b>Red Plag</b></a>
 <a class="logoside" href="/">Team 779499120</a>
-<br>
-<br>
 <hr class="hr1">
-<p class="heading">Uploaded Files</p>
+<p class="heading"><b>Uploaded Files</b></p>
 <div class="message1">{{message1}}</div>
-<br>
 {% for post in file %}
-<a class="files" href="{{post.picture.url}}" download="{{post.picture.url}}">Download {{post.picture.name}}</a>
+<script>
+  function my(we){
+  var x=we
+  var y=x.split('/')
+  return y[1]
+}
+</script>
+<a class="files" href="{{post.picture.url}}" download="{{post.picture.url}}">Download {{post.name}}</a>
 <p class="time">{{post.last_time}}</p>
-<br>
 {% endfor %}
 <form action="/{{username}}/dashboard/">
       <div class="columnbutton">

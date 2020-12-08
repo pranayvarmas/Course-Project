@@ -7,126 +7,81 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from os import listdir
 from os.path import isfile, join
-x = 0
-y = os.listdir(os.getcwd())
-#files = sys.argv[1:]
-#lines = []
-#word_count_vector = []
-#lengths = []
+global z
+z=[]
 def unzip(fil):
     with zipfile.ZipFile(fil, 'r') as zip_ref:
         zip_ref.extractall('.')
     files = [join(fil.__str__()[0:len(fil.__str__())-4], f) for f in listdir(fil.__str__()[0:len(fil.__str__())-4]) if isfile(join(fil.__str__()[0:len(fil.__str__())-4], f))]
     return files
 
+#lines = []
 def merge(l):
    ans = ""
    for i in l:
       ans = ans + i
    return ans.replace('\n', ' ')
 
+def edit_functions(dat):
+    functions = {}
+    for i in range(len(dat)-1):
+        if (dat[i].find("def") != -1):
+            ind1 = dat[i].find("def") + 3
+            for k in range(ind1+1, len(dat[i])):
+                if (dat[i][k] != " "):
+                    ind1 = k
+                    break
+            ind2 = 0
+            for k in range(ind1, len(dat[i])):
+                if (dat[i][k] == " " or dat[i][k] == "("):
+                    ind2 = k - 1
+                    break
+            function = dat[i][ind1:(ind2+1)]
+            ind3 = dat[i].find(":")
+            definition = ""
+            for k in range(ind3+1, len(dat[i])-2):
+                if (dat[i][k] != " "):
+                    ind4 = i
+                    definition = dat[i][ind4:]
+                    break
+            if (definition != ""):
+                functions[function] = definition
+                dat[i]= dat[i][0:ind1] + "\n"
+                continue
+            else:
+                for k in range(len(dat[i+1])):
+                    if (dat[i+1][k] != " "):
+                        ind4 = k
+                        break
+
+                ind6 = 0
+                for k in range(i+1, len(dat)):
+                    for l in range(len(dat[k])):
+                        if (dat[k][l] != " "):
+                            ind5 = l
+                            break
+                    if (ind4 > ind5):
+                        ind6 = k - 1
+                        break
+                definition = merge(dat[i:(ind6+1)])
+                #print(function, "hi")
+                functions[function] = definition
+                #print(function, definition)
+                dat[i]= dat[i][0:ind1] + "\n"
+                for g in range(i+1, ind6+1):
+                    dat[g] = "\n"
+    return [dat, functions]
+
 def eliminate_comments(dat):
     for i in range(len(dat)):
-        ind = dat[i].find("/*")
-        #print(ind)
-        if (ind != -1) :
-            #dat[i] = dat[i][0:ind] + "\n"
-            j = i
-            ind1 = dat[j].find("*/")
-            while (ind1 == -1) :
-                j = j + 1
-                ind1 = dat[j].find("*/")
-            #dat[i] = dat[i][0:ind] + "\n"
-            for k in range(i+1, j):
-                dat[k] = "\n"
-            #dat[j] = dat[j][(ind1+1):]
-            if (j == i) :
-                dat[i] = dat[i][0:ind] + " " + dat[i][(ind1+2):]
-            else :
-                dat[i] = dat[i][0:ind] + "\n"
-                dat[j] = dat[j][(ind1+2):]
-
-
-    for i in range(len(dat)):
-        ind = dat[i].find("//")
+        ind = dat[i].find("#")
         #print(ind)
         if (ind != -1) :
             dat[i] = dat[i][0:ind] + "\n"
     return dat
-
-def remove_functions(data):
-    ind7 = data.find("int main")
-    #print(ind7)
-    globa = data[0:ind7]
-    globa = globa + "{"
-    functions = {}
-    ind = globa.find("{")
-    #print(ind)
-    #count = 0
-    #print(len(globa))
-    while (ind != -1):
-        if (globa[(ind+1):].find("}")==-1):
-            break
-        if (globa[(ind+1):].find("{") < globa[(ind+1):].find("}")):
-            ind1 = ind
-            #print(ind1, "hi")
-            while (globa[(ind1+1):].find("{") < globa[(ind1+1):].find("}")):
-                #print
-                count=ind1+1+globa[(ind1+1):].find("}")
-                k=0
-                while (ind1+1+globa[(ind1+1):].find("{") < count):
-                    #count=count-globa[(ind1+1):].find("{")
-                    ind1 = ind1+1 + globa[(ind1+1):].find("{")
-                    k=k+1
-                    #print k
-                for i in range(k):
-                    ind1 = ind1+1 + globa[(ind1+1):].find("}")
-                #print(ind1)
-            ind1 = ind1+1 + globa[(ind1+1):].find("}")
-            #print(ind1)
-        else:
-            ind1 = ind+1 + globa[(ind+1):].find("}")
-            #print(ind1)
-        #print(ind1)
-        #print(ind, "ind")
-        ind2 = globa[0:ind].rfind("(")
-        #print(ind2, "ind2")
-        #print(ind2)
-        #count = count + 1
-        #if (count == 10):
-        #   break
-        ind3 = 0
-        ind4 = 0
-        for c in range(ind2 - 1, 0, -1):
-            if (globa[c] != " "):
-                ind3 = c
-                break
-        for c in range(ind3, 0, -1):
-            #print(c, "c")
-            if (globa[c] == " "):
-                ind4 = c + 1
-                break
-        #print(ind4, ind1+1)
-        function = globa[ind4:(ind3+1)]
-        functions[function] = globa[(ind+1):ind1]
-        #print(function, globa[(ind+1):ind1])
-        #print("break")
-        globa = globa[0:ind4]+" "+globa[(ind1+1):]
-        #print(len(globa), "jk")
-        ind = globa.find("{")
-        #print(ind)
-    #print(data)
-    data = globa + " " + data[ind7:]
-    #print("hi")
-    for w in list(functions.keys()):
-        data = data.replace(w, functions[w])
-    return data
-
 def set_globvar(lengths):
     global x   # Needed to modify global copy of globvar
     x = len(lengths)
-
-
 def find_signature(files):
     word_count_vector = []
     lengths = []
@@ -139,9 +94,14 @@ def find_signature(files):
             dat = eliminate_comments(dat)
             #print(l)
         #print(dat)
+            [dat, functions] = edit_functions(dat)
             data = merge(dat)
+            for w in list(functions.keys()):
+                data.replace(w, functions[w])
+            #print(w)
+            #print(data)
+            #print(functions)
         #print(data)
-            data = remove_functions(data)
             data = re.sub(r'[^\w]', ' ', data)
         #lines.append(data)
             words = data.split(' ')
@@ -155,6 +115,8 @@ def find_signature(files):
             set_globvar(lengths)
     return [word_count_vector, lengths]
 
+#print(word_count_vector)
+#print(lengths)
 def sort_pad(lengths, word_count_vector):
     final_length = max(lengths)
     for w in word_count_vector:
@@ -168,6 +130,7 @@ def sort_pad(lengths, word_count_vector):
             w.sort()
     return [word_count_vector, final_length]
 
+#print(word_count_vector)
 def normalize(word_count_vector, final_length):
     final_word_count = [[] for j in range(final_length)]
 
@@ -185,33 +148,33 @@ def normalize(word_count_vector, final_length):
                 continue
             w[i] = (w[i] - means[i])/stds[i]
     return word_count_vector
-
+#print(word_count_vector)
 def similar(word_count_vector):
     an = [0 for i in range(len(word_count_vector))]
     ad = [an for i in range(len(word_count_vector))]
     final = np.array(ad, dtype=float)
     for i in range(len(word_count_vector)):
         for j in range(len(word_count_vector)):
-            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
-                val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
-            if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
-                val=1.0;
-            final[i][j] = val
+            #if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))!=0):
+             #   val = np.dot(np.array(word_count_vector[i]), np.array(word_count_vector[j])) / (np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))
+            #if((np.linalg.norm(np.array(word_count_vector[i]))*np.linalg.norm(np.array(word_count_vector[j])))==0):
+             #   val=1.0;
+            val = 1-np.linalg.norm(np.array(word_count_vector[i]) - np.array(word_count_vector[j]))/max(np.linalg.norm(np.array(word_count_vector[i])), np.linalg.norm(np.array(word_count_vector[j])))
+            final[i][j] = val*100
+            if(final[i][j]>100):
+                final[i][j]=100
     return final
-
 def evaluate(zip):
     files = unzip(zip)
     [word_count_vector, lengths] = find_signature(files)
     [word_count_vector, final_length] = sort_pad(lengths, word_count_vector)
-    word_count_vector = normalize(word_count_vector, final_length)
+    #word_count_vector = normalize(word_count_vector, final_length)
     final = similar(word_count_vector)
-    print(final)
+    #print(final)
     return final
-final = evaluate(sys.argv[1])
-# available files in the container
-a=os.listdir(os.getcwd())
-z=list(set(a) - set(y))
-LIST = os.listdir(str(z[0]))
+#print(np.dot(np.array(word_count_vector[0]), np.array(word_count_vector[0])) / (np.linalg.norm(np.array(word_count_vector[0]))*np.linalg.norm(np.array(word_count_vector[0]))))
+[final,LIST] = evaluate(sys.argv[1])
+LIST=os.listdir(str((sys.argv[1][:(len(sys.argv[1]))-4])))
 def csv_write(final):
     file = open('REDPLAG.csv', 'wb')
     file1 = open('REDPLAG.csv', 'a+', newline ='')
@@ -241,13 +204,13 @@ def csv_write(final):
             write.writerows(result)
 def plots(final):
     fig = plt.figure()
-    ax = sns.heatmap(final, linewidth=0.5,cmap="hot")
+    ax = sns.heatmap(final, linewidth=0.5,cmap="hot",vmin =0,vmax =100,annot =True,fmt='g')
     ax.set_xticks(np.arange(len(LIST)))
     ax.set_yticks(np.arange(len(LIST)))
 # ... and label them with the respective list entries
     ax.set_xticklabels(LIST)
     ax.set_yticklabels(LIST)
-
+    ax.set_title("RESULT")
 # Rotate the tick labels and set their alignment.
     plt.setp(ax.get_xticklabels(), rotation=90, ha="right",
          rotation_mode="anchor")
@@ -256,9 +219,7 @@ def plots(final):
     fig.savefig('REDPLAG.png', bbox_inches='tight', dpi=150)
 
 # Loop over data dimensions and create text annotations.
-    ax.set_title("RESULT")
     plt.show()
+final = final.astype('int')
 plots(final)
-final = final.astype('str')
 csv_write(final)
-

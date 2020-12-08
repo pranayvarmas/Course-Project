@@ -9,6 +9,7 @@ class Profile(models.Model):
     picture = models.FileField(upload_to = 'uploads_cdn/')
     picture2=models.FileField(upload_to=('input/'), default='')
     last_time=models.DateTimeField(auto_now=True)
+    name=models.CharField(max_length=100)
     def name(self):
         return os.path.basename(self.picture.name)
 

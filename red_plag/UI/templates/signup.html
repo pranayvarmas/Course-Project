@@ -1,16 +1,14 @@
-<html>
+<!DOCTYPE html>
 <meta charset="UTF-8">
     <title> Red Plag </title>
-    <link rel="stylesheet" href="./all.css">
+    <link rel="stylesheet" type="text/css" href="/{{ STATIC_URL }}static/all.css" />
     
 </head>
 <body>
 <a class="logo" href="/"><b>Red Plag</b></a>
 <a class="logoside" href="/">Team 779499120</a>
-<br>
-<br>
 <hr class="hr1">
-<p class="heading">Sign Up</p>
+<p class="heading"><b>Sign Up</b></p>
       <form name = "form" action = "/createdaccount/" method = "post" >{% csrf_token %}
          <div class="column">
             <span class="colspan">Email:</span>
@@ -23,23 +21,19 @@
                <input type = "text" class="colinput"
                   placeholder = "username" name = "username" />
          </div>
-
          <br>
-
          <div class="column">
             <span class="colspan">Password:</span>
                <input type = "password" class="colinput"
                   placeholder = "password" name = "password1" />
          </div>
-
          <br>
-
          <div class="column">
             <span class="colspan">Password(again):</span>
                <input type = "password" class="colinput"
                   placeholder = "password(again)" name = "password2" />
          </div>
-          <br>
+         <br>
            <div class="columnbox">
             <span class="colboxspan">University:</span> <select class="colboxinput" name="university" id="university">
             <option value="" selected="selected">Select</option>
@@ -54,9 +48,8 @@
                   select.options[i] = new Option(options[i], options[i]);
               }
               </script>
-            <br>
         </div>
-         <br>
+        <br>
          <div class="column">
                 <label>
                 <span class="colspan">Passcode: </span>
@@ -64,9 +57,6 @@
                   placeholder = "passcode" name = "passcode" />
               </label>
          </div>
-         <br>
-         <br>
-
          <div class="columnbutton">
                <button class="colbutton" type = "submit"
                   value = "save" >
@@ -75,7 +65,6 @@
               </div>
                </button>
          </div>
-
       </form>
       <form action="/">
           <div class="columnbutton">
@@ -89,8 +78,8 @@
       </form>
       <div>
       {% if message2 %}
-      <div class="message1">Error Message:</div>
-      <div class="message1">{{message2}}</div>
+      <div class="message2">Error Message:</div>
+      <div class="message2">{{message2}}</div>
       {% endif %}
    </div>
    </body>
