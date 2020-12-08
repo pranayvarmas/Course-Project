@@ -1132,20 +1132,17 @@ def download(request, path):
 		for link in links1:
 			links=links+link.university+";"
 	if request.user.is_authenticated:
-		if UserModel.objects.filter(username=request.user.username).exists():
-			#print(1)
-			path=pathlib.Path(str(os.getcwd())+'/uploads_cdn/'+str(path).split('/')[-1])
-			#print(str(path))
-			file_path = os.path.join(settings.MEDIA_ROOT, path)
-			if os.path.exists(file_path):
-				with open(file_path, 'rb') as fh:
-					response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-					response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
-					#print(response)
-					return response
-			raise Http404
-		else:
-			return redirect('/')
+		#print(1)
+		path=pathlib.Path(str(os.getcwd())+'/uploads_cdn/'+str(path).split('/')[-1])
+		#print(str(path))
+		file_path = os.path.join(settings.MEDIA_ROOT, path)
+		if os.path.exists(file_path):
+			with open(file_path, 'rb') as fh:
+				response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+				response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file_path)
+				#print(response)
+				return response
+			raise Http404		
 	else:
 		message1="Please login to download the files"
 		return render(request,'login.html', {"message1":message1, "links":links})
