@@ -729,7 +729,7 @@ x=0
 def p_unzip(fil):
 	with zipfile.ZipFile(fil, 'r') as zip_ref:
 		zip_ref.extractall('./input/')
-	files = [join(fil.__str__()[0:len(fil.__str__())-4], f) for f in listdir(fil.__str__()[0:len(fil.__str__())-4]) if isfile(join(fil.__str__()[0:len(fil.__str__())-4], f))]
+	files = [join(fil.__str__()[0:len(fil.__str__())-4], f) for f in listdir_nohidden(fil.__str__()[0:len(fil.__str__())-4]) if isfile(join(fil.__str__()[0:len(fil.__str__())-4], f))]
 	return files
 
 #lines = []
