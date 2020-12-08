@@ -24,6 +24,6 @@ select.colboxinput {margin-left:20%;padding: 5px 40px;margin: 8px 0;box-sizing: 
 hr.hr1 {color:white;}
 a.files:link, a.files:visited, a.files:active{color:rgba(255,255,255,1);text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;}
 a.files:hover{color:rgba(0,0,255,1);text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;}
-p.time{color:rgba(0,153,255,1);text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;}
+p.time{color:white;text-decoration:none;font-size:1.2em;font-family:"Calibri";padding-left:.7em;text-align:center;}
 p.details{color:rgba(0,255,0,1);font-size:1.7em; text-align:center;}
 p.instructions{color:white;font-size:1.3em;text-align:center;}
