@@ -14,6 +14,7 @@ urlpatterns = [
 	path('resetpassword/', v.resetpassword, name='resetpassword'),
 	path('univsignup/', v.univsignup, name='univsignup'),
 	path('aboutus/', v.aboutus, name='aboutus'),
+	path('<str:path>/download/', v.download, name='download'),
 	path('<str:username>/dashboard/',v.dashboard,name='dashboard'),
 	path('<str:username>/univdashboard/',v.univdashboard,name='univdashboard'),
 	path('signup/', v.signup, name='signup'),
