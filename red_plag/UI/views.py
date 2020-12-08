@@ -1088,28 +1088,36 @@ def yourfiles(request, username):
 def univfiles(request, univ, username):
 	
 	if request.user.is_authenticated:
-		if UserModel.objects.filter(username=username).exists():
-			sample=UserModel.objects.get(username=username)
-			if UniversityModel.objects.filter(username=univ).exists():
-				sample2=UniversityModel.objects.get(username=univ)
-				if sample2.university==sample.university:
-					s=sample.uploads
-					#s="1;2;3;4;5;6;7;8;9;0;10;11;12;13;14;15;16;17;18;19;20;"
-					t=s.split(";")
-#					print(t)
-						#file[e]=(Profile.objects.filter(id=int(row)))
-						#e=e+1
-					context = {"username":univ, 'file': Profile.objects.filter(id__in=t[:-1])}
-#					print(context)
-					return render(request, 'indfiles.html', context);
+		if UniversityModel.objects.filter(username=request.user.username).exists():
+			samplei=UniversityModel.objects.get(username=request.user.username)
+			if samplei.uploads=="-1" and samplei.university==univ:
+				if UserModel.objects.filter(username=username).exists():
+					sample=UserModel.objects.get(username=username)
+					if UniversityModel.objects.filter(username=univ).exists():
+						sample2=UniversityModel.objects.get(username=univ)
+						if sample2.university==sample.university:
+							s=sample.uploads
+							#s="1;2;3;4;5;6;7;8;9;0;10;11;12;13;14;15;16;17;18;19;20;"
+							t=s.split(";")
+#							print(t)
+								#file[e]=(Profile.objects.filter(id=int(row)))
+								#e=e+1
+							context = {"username":univ, 'file': Profile.objects.filter(id__in=t[:-1])}
+#							print(context)
+							return render(request, 'indfiles.html', context);
+						else:
+							message1="You don't have access to this user files"
+							return render(request, 'univdashboard.html', {"message1":message1})
+					else:
+						return redirect('/')
 				else:
-					message1="You don't have access to this user files"
-					return render(request, 'univdashboard.html', {"message1":message1})
+					#message1="Invalid"
+					return redirect('/')
 			else:
 				return redirect('/')
 		else:
-			#message1="Invalid"
 			return redirect('/')
+
 	else:
 		message1="Please login to download the files"
 		return render(request,'login.html', {"message1":message1})
