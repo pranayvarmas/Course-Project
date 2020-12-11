@@ -95,7 +95,7 @@ def find_signature(files):
             [dat, functions] = edit_functions(dat)
             data = merge(dat)
             for w in list(functions.keys()):
-                data.replace(w, functions[w])
+                data=data.replace(w, functions[w])
             #print(w)
             #print(data)
             #print(functions)
