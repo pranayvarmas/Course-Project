@@ -186,10 +186,10 @@ def signup(request):
 		for link in links1:
 			links=links+link.university+";"
 	if request.user.is_authenticated:
-		if UserModel.objects.get(username=request.user.username).exists():
+		if UserModel.objects.filter(username=request.user.username).exists():
 			return redirect('dashboard', username=request.user.username)
 		else:
-			if UniversityModel.objects.get(username=request.user.username).exists():
+			if UniversityModel.objects.filter(username=request.user.username).exists():
 				return redirect('univdashboard', username=request.user.username)
 			else:
 				logout(request)
@@ -205,10 +205,10 @@ def univsignup(request):
 		for link in links1:
 			links=links+link.university+";"
 	if request.user.is_authenticated:
-		if UserModel.objects.get(username=request.user.username).exists():
+		if UserModel.objects.filter(username=request.user.username).exists():
 			return redirect('dashboard', username=request.user.username)
 		else:
-			if UniversityModel.objects.get(username=request.user.username).exists():
+			if UniversityModel.objects.filter(username=request.user.username).exists():
 				return redirect('univdashboard', username=request.user.username)
 			else:
 				logout(request)
@@ -824,7 +824,7 @@ def p_find_signature(files):
 			[dat, functions] = p_edit_functions(dat)
 			data = p_merge(dat)
 			for w in list(functions.keys()):
-				data.replace(w, functions[w])
+				data=data.replace(w, functions[w])
 			#print(w)
 			#print(data)
 			#print(functions)
